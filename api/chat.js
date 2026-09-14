@@ -112,7 +112,13 @@ module.exports = async (req, res) => {
     if (!response.ok) {
       const errText = await response.text();
       console.error("Anthropic API error:", response.status, errText);
-      res.status(502).json({ error: "Upstream model error" });
+      // TEMPORARY DEBUG: surfaces the upstream error so we can diagnose it
+      // directly. Remove once the integration is confirmed working.
+      res.status(502).json({
+        error: "Upstream model error",
+        debugUpstreamStatus: response.status,
+        debugUpstreamBody: errText,
+      });
       return;
     }
 
