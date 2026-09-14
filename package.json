@@ -1,0 +1,9 @@
+{
+  "name": "resume-chat-widget",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for the resume site chat widget — grounds Claude in Robert Lamb's real career case studies.",
+  "engines": {
+    "node": ">=18"
+  }
+}
