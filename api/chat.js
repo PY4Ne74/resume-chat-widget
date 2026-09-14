@@ -54,16 +54,7 @@ module.exports = async (req, res) => {
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    // TEMPORARY DEBUG: reveals which relevant env var names Vercel actually
-    // injected at runtime (never the values) so we can diagnose why the key
-    // isn't showing up. Remove this debug block once the key is confirmed working.
-    res.status(500).json({
-      error: "Server misconfigured: missing API key",
-      debugEnvKeysSeen: Object.keys(process.env)
-        .filter((k) => k.includes("ANTHROPIC") || k.includes("ALLOWED"))
-        .sort(),
-      debugTotalEnvVarCount: Object.keys(process.env).length,
-    });
+    res.status(500).json({ error: "Server misconfigured: missing API key" });
     return;
   }
 
@@ -112,13 +103,7 @@ module.exports = async (req, res) => {
     if (!response.ok) {
       const errText = await response.text();
       console.error("Anthropic API error:", response.status, errText);
-      // TEMPORARY DEBUG: surfaces the upstream error so we can diagnose it
-      // directly. Remove once the integration is confirmed working.
-      res.status(502).json({
-        error: "Upstream model error",
-        debugUpstreamStatus: response.status,
-        debugUpstreamBody: errText,
-      });
+      res.status(502).json({ error: "Upstream model error" });
       return;
     }
 
