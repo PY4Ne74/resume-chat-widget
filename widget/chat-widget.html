@@ -9,6 +9,7 @@
   .rl-chat-intro { text-align:center; margin-bottom:16px; }
   .rl-chat-intro h3 { margin:0 0 6px; font-size:1.3rem; color:var(--rl-text); }
   .rl-chat-intro p { margin:0; color:var(--rl-muted); font-size:0.95rem; }
+  .rl-ai-badge { display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:5px 12px; border-radius:999px; background:var(--rl-accent-light); color:var(--rl-accent); font-size:0.78rem; font-weight:600; }
   .rl-chat-panel { background:var(--rl-bg); border:1px solid var(--rl-border); border-radius:var(--rl-radius); box-shadow:0 4px 24px rgba(0,0,0,0.06); overflow:hidden; }
   .rl-chat-messages { max-height:420px; min-height:120px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; }
   .rl-msg { max-width:85%; padding:10px 14px; border-radius:12px; font-size:0.95rem; line-height:1.45; white-space:pre-wrap; }
@@ -45,6 +46,7 @@
   <div class="rl-chat-intro">
     <h3>Not sure Robert's experience fits your business?</h3>
     <p>Tell me a bit about your business and what you're trying to achieve — I'll show you where it maps to his actual track record.</p>
+    <div class="rl-ai-badge">🤖 AI-powered by Robert's real career data — try it</div>
   </div>
   <div class="rl-chat-panel">
     <div class="rl-chat-messages" id="rlMessages"></div>
@@ -175,17 +177,59 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text.trim(), history: history })
       });
-      var data = await res.json();
-      hideTyping();
 
-      if (!res.ok || !data.reply) {
+      var contentType = res.headers.get("Content-Type") || "";
+
+      // Non-streaming path: any error response is still plain JSON.
+      if (!res.ok || contentType.indexOf("application/json") !== -1) {
+        hideTyping();
         addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
-      } else {
-        addMessage("assistant", data.reply);
-        history.push({ role: "user", content: text.trim() });
-        history.push({ role: "assistant", content: data.reply });
-        ctaRow.classList.add("rl-visible");
+        return;
       }
+
+      // Streaming path: read raw text chunks as they arrive and show them
+      // live (typewriter effect), then re-render the final text as proper
+      // bullets/bold once the stream completes.
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var fullText = "";
+      var streamDiv = null;
+      var rawTextEl = null;
+
+      while (true) {
+        var chunk = await reader.read();
+        if (chunk.done) break;
+        var piece = decoder.decode(chunk.value, { stream: true });
+        if (!piece) continue;
+
+        if (!streamDiv) {
+          hideTyping();
+          streamDiv = document.createElement("div");
+          streamDiv.className = "rl-msg rl-msg-assistant";
+          rawTextEl = document.createElement("span");
+          rawTextEl.className = "rl-streaming-raw";
+          streamDiv.appendChild(rawTextEl);
+          messagesEl.appendChild(streamDiv);
+        }
+
+        fullText += piece;
+        rawTextEl.textContent = fullText;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      if (!streamDiv || !fullText.trim()) {
+        hideTyping();
+        addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
+        return;
+      }
+
+      streamDiv.innerHTML = "";
+      renderFormattedText(streamDiv, fullText.trim());
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      history.push({ role: "user", content: text.trim() });
+      history.push({ role: "assistant", content: fullText.trim() });
+      ctaRow.classList.add("rl-visible");
     } catch (err) {
       hideTyping();
       addMessage("error", "Couldn't reach the server — mind trying again, or just reach out directly?");

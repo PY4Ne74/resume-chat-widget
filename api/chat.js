@@ -5,6 +5,32 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
 const MAX_OUTPUT_TOKENS = 1024;
 const MAX_MESSAGE_LENGTH = 1200;
 const MAX_HISTORY_TURNS = 8;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 15;
+
+// In-memory, per-instance rate limiting. Vercel can run multiple instances
+// of this function, so this isn't a hard distributed guarantee — but it
+// meaningfully raises the bar against basic scripted abuse at near-zero cost
+// and no new service dependency, which is proportionate for expected traffic
+// on a personal resume site. Upgrade to a shared store (e.g. Upstash Redis)
+// if it ever needs to be airtight.
+const rateLimitStore = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const recent = (rateLimitStore.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  recent.push(now);
+  rateLimitStore.set(ip, recent);
+  return recent.length > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function getClientIp(req) {
+  const forwarded = req.headers["x-forwarded-for"];
+  if (typeof forwarded === "string" && forwarded.length) {
+    return forwarded.split(",")[0].trim();
+  }
+  return req.socket?.remoteAddress || "unknown";
+}
 
 function buildSystemPrompt(turnNumber) {
   const kb = JSON.stringify(knowledgeBase, null, 2);
@@ -22,6 +48,12 @@ GROUNDING RULES (do not break these):
 
 GRAMMATICAL AGREEMENT (applies to every reply, especially opening lines):
 Before writing your opening line, check what grammatical form the visitor's message actually takes — a yes/no question ("Can you help?", "Do you have experience with X?"), an open question ("How can you help?", "What would you do?"), or a plain statement ("I need more leads"). Your opening line must be a grammatically natural response to THAT form. Never force fixed wording that doesn't logically answer what was asked — e.g. "Yes, absolutely" only works as a reply to a yes/no question; it's a non-sequitur after "How can you help?". This rule overrides any template wording below when the two conflict — preserve the template's confident tone and content, not its literal phrasing, whenever the visitor's actual phrasing doesn't fit it.
+
+VARY YOUR PHRASING:
+Never reuse the exact same sentence wording across replies, even when the same playbook or case study applies again. The underlying facts, structure, and bullet content stay locked — express them in fresh wording every time. The same question asked twice (by the same visitor or a different one) should produce the same facts and the same structure, never an identical sentence.
+
+REFLECT THE VISITOR'S OWN WORDS:
+Pick out at least one concrete, specific detail the visitor actually typed — a city, a company type, a number, a phrase they used — and work it naturally into your opening line. Don't just map them to a category and drop the specifics (e.g. if they said "law firm in Dallas, Texas," don't reduce that to just "a law firm") — a good response shows you read their actual message, not just classified it.
 
 RESPONSE SHAPE (every reply — keep it SHORT, this is a chat widget, not an essay):
 1. Opening line:
@@ -74,6 +106,11 @@ module.exports = async (req, res) => {
     return;
   }
 
+  if (isRateLimited(getClientIp(req))) {
+    res.status(429).json({ error: "Too many requests — please wait a bit and try again." });
+    return;
+  }
+
   const { message, history } = req.body || {};
 
   if (typeof message !== "string" || !message.trim()) {
@@ -114,6 +151,7 @@ module.exports = async (req, res) => {
         max_tokens: MAX_OUTPUT_TOKENS,
         system: buildSystemPrompt(turnNumber),
         messages,
+        stream: true,
       }),
     });
 
@@ -124,16 +162,56 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const data = await response.json();
-    // Claude's response can include non-text blocks (e.g. "thinking") before
-    // the actual answer, so find the text block by type rather than assuming
-    // index 0.
-    const textBlock = data.content?.find((block) => block.type === "text");
-    const reply = textBlock?.text?.trim() || "";
+    // Proxy the stream to the client as plain text — only forwarding actual
+    // "text" content block deltas. Claude's stream can include a "thinking"
+    // content block before the text block; that must never reach the client.
+    res.status(200);
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
 
-    res.status(200).json({ reply });
+    const blockTypes = {};
+    let buffer = "";
+    const decoder = new TextDecoder();
+    const reader = response.body.getReader();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop(); // keep the last (possibly partial) line for next chunk
+
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const jsonStr = line.slice(6).trim();
+        if (!jsonStr) continue;
+
+        let evt;
+        try {
+          evt = JSON.parse(jsonStr);
+        } catch (e) {
+          continue;
+        }
+
+        if (evt.type === "content_block_start") {
+          blockTypes[evt.index] = evt.content_block?.type;
+        } else if (evt.type === "content_block_delta") {
+          const isTextBlock = blockTypes[evt.index] === "text";
+          if (isTextBlock && evt.delta?.type === "text_delta" && evt.delta.text) {
+            res.write(evt.delta.text);
+          }
+        }
+      }
+    }
+
+    res.end();
   } catch (err) {
     console.error("Chat handler error:", err);
-    res.status(500).json({ error: "Something went wrong" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Something went wrong" });
+    } else {
+      res.end();
+    }
   }
 };
