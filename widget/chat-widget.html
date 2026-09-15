@@ -42,11 +42,10 @@
     transition:background 0.15s,border-color 0.15s,color 0.15s;
   }
   .rl-chip:hover { background:rgba(94,234,212,0.08); border-color:rgba(94,234,212,0.4); color:var(--text); }
-  .rl-cta-row { display:none; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .rl-cta-row { display:none; justify-content:center; margin-bottom:14px; }
   .rl-cta-row.rl-visible { display:flex; }
-  .rl-cta-btn { flex:1; min-width:180px; text-align:center; text-decoration:none; padding:11px 16px; border-radius:12px; font-size:0.9rem; font-weight:600; }
+  .rl-cta-btn { text-align:center; text-decoration:none; padding:11px 28px; border-radius:12px; font-size:0.9rem; font-weight:600; }
   .rl-cta-primary { background:var(--teal); color:var(--on-teal); }
-  .rl-cta-secondary { background:transparent; color:var(--teal); border:1px solid rgba(94,234,212,0.4); }
 
   .rl-input-wrap {
     position:relative; border-radius:18px; padding:16px 18px 14px; margin-bottom:14px;
@@ -107,21 +106,18 @@
     </div>
     <div class="rl-cta-row" id="rlCtaRow">
       <a href="#" class="rl-cta-btn rl-cta-primary" id="rlCtaBook" target="_blank" rel="noopener">Book a 15-min call</a>
-      <a href="#" class="rl-cta-btn rl-cta-secondary" id="rlCtaResume" target="_blank" rel="noopener">Download full résumé</a>
     </div>
   </div>
 </div>
 
 <script>
 (function () {
-  // ---- CONFIG: edit these three before publishing ----
+  // ---- CONFIG: edit these two before publishing ----
   var API_URL = "https://resume-chat-widget.vercel.app/api/chat";
   var CALENDLY_URL = "https://calendly.com/YOUR-LINK";
-  var RESUME_DOWNLOAD_URL = "https://YOUR-SITE.com/robert-lamb-resume.pdf";
   // ------------------------------------------------------
 
   document.getElementById("rlCtaBook").href = CALENDLY_URL;
-  document.getElementById("rlCtaResume").href = RESUME_DOWNLOAD_URL;
 
   var messagesEl = document.getElementById("rlMessages");
   var inputEl = document.getElementById("rlInput");
