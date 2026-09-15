@@ -12,9 +12,49 @@
       "role": "VP of Marketing / Director of Marketing",
       "industry_tags": ["cybersecurity", "saas", "b2b tech", "startup"],
       "challenge": "A 3-month-old cybersecurity company needed a full rebrand and an ongoing stream of website, video, and sales collateral production, but traditional agency/dev costs and turnaround times were too slow and expensive for a startup.",
-      "action": "Led the full rebrand from Blueshift Cybersecurity to IntelliThreat and brought website/video/collateral production in-house, building an AI-accelerated production pipeline using Claude, Higgsfield, Elementor/WordPress, and Remotion.",
+      "action": "Led the full rebrand from Blueshift Cybersecurity to IntelliThreat and brought website/video/collateral production in-house, building an AI-accelerated production pipeline using Claude, Higgsfield, Elementor/WordPress, and Remotion. Range extends beyond AI prompting alone — e.g. the homepage's radar/scanner animations were built as code-rendered assets (Python/Pillow/ffmpeg), not AI-generated, when that was the better tool for the job.",
       "result": "Saved $200K+ in production costs and dramatically accelerated turnaround time versus outsourcing to agencies or traditional dev teams.",
       "relevant_for": ["rebrand", "website costs", "marketing production speed", "AI production", "budget-constrained marketing", "startup marketing", "doing more with a lean team"]
+    },
+    {
+      "id": "intellithreat-video-ad-production",
+      "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
+      "role": "VP of Marketing / Director of Marketing",
+      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "challenge": "Needed broadcast-quality YouTube ad campaigns (M365, Google Workspace attack-story ads) without hiring a video production agency or dedicated editor.",
+      "action": "Personally directed and iterated video ad production end-to-end using Remotion (programmatic, code-driven video) — testing voiceover options, music, pacing, and length across 40+ iterations per campaign to land on the strongest cut.",
+      "result": "Produced multiple finished 4K YouTube ad campaigns (M365, Google Workspace) entirely in-house, with the iteration rigor of an agency edit process at a fraction of the cost and turnaround time.",
+      "relevant_for": ["video production", "video ads", "youtube advertising", "in-house video capability", "AI-accelerated production", "technical range beyond prompting"]
+    },
+    {
+      "id": "intellithreat-linkedin-campaign",
+      "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
+      "role": "VP of Marketing / Director of Marketing",
+      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "challenge": "Needed a steady cadence of differentiated LinkedIn content translating technical security capabilities into buyer-relevant messaging, without a dedicated content or design team.",
+      "action": "Built and executed an integrated LinkedIn content system — writing posts and designing matching custom graphics for each, covering distinct buyer-relevant themes (data residency, autonomous threat hunting, compliance readiness, deployment speed, plain-language alerts) using a locked, code-rendered graphic template for visual consistency.",
+      "result": "Shipped 15+ LinkedIn posts with matching custom graphics across 10+ distinct campaign themes, produced systematically rather than one-off.",
+      "relevant_for": ["social media content", "linkedin marketing", "content production at scale", "organic social", "content-led growth"]
+    },
+    {
+      "id": "intellithreat-seo-ai-search-audit",
+      "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
+      "role": "VP of Marketing / Director of Marketing",
+      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "challenge": "After a domain migration (Blueshift Cybersecurity to IntelliThreat), the site lost most of its search visibility with no clear diagnosis of why.",
+      "action": "Ran a full technical SEO audit, root-causing the visibility loss to botched migration redirects (271 of 307 URLs dumping to the homepage instead of equivalent pages), and shipped fixes (titles, meta descriptions, schema) across 32 priority pages. Also ran a forward-looking AI-search readiness audit — evaluating and improving whether AI assistants like Perplexity and ChatGPT cite the site, not just whether Google ranks it.",
+      "result": "Verified Perplexity already citing IntelliThreat by name for a real buyer query (\"best autonomous AI threat detection and response platform for M365 that keeps data in tenant\") as of September 2026. The core indexing fix from the migration issue is fully diagnosed with a clear remediation plan; that specific fix is in progress, not yet complete — flagged honestly rather than overstated.",
+      "relevant_for": ["seo", "technical seo", "ai seo", "aeo", "geo", "domain migration", "site audits", "search visibility recovery"]
+    },
+    {
+      "id": "ai-orchestrated-job-search-ops",
+      "company": "Personal project — Robert's own job search",
+      "role": "Builder / Operator",
+      "industry_tags": ["personal productivity", "marketing automation", "systems design"],
+      "challenge": "Running an effective modern job search meant coordinating five disconnected tools — lead sourcing, LinkedIn outreach, cold email, CRM logging, personalized video — normally requiring constant manual dashboard-switching with no real visibility into what's actually working.",
+      "action": "Architected and built an AI-orchestrated growth-ops stack — lead sourcing (Lemlist), automated email outreach (Smartlead), LinkedIn outreach, CRM logging (HubSpot), and personalized AI video outreach (SendSpark), all controlled through one conversational interface — then built \"JobbyFind,\" a live operations dashboard that pulls real data automatically every day (Google Analytics, Smartlead, Lemlist) and generates honest AI-driven daily insights, including uncomfortable ones, not just vanity metrics.",
+      "result": "He applies his own tools to his own goals — exactly what he'd do for a client or employer. Full-stack tool orchestration, live measurement instead of guesswork, and the discipline to self-report honestly on what's working and what isn't.",
+      "relevant_for": ["ai orchestration", "marketing automation", "crm integration", "systems thinking", "personal productivity systems", "does he practice what he preaches", "technology mastery", "process design"]
     },
     {
       "id": "intellithreat-lead-gen-conversion",
