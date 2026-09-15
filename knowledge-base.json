@@ -224,15 +224,17 @@
       "id": "lead-generation",
       "topic": "lead generation",
       "trigger_description": "Visitor wants more leads, more inbound traffic that converts, or says their website/marketing isn't producing enough leads or customers.",
-      "headline": "Full-funnel lead generation — not just running ads, the whole system from first click to close.",
+      "opener_template": "Yes, absolutely. [Visitor's business/industry], like most other industries, relies on the same factors I've spent my career optimizing for successful lead generation campaigns.",
+      "headline": "These factors include:",
       "bullets": [
-        "Targeting & market analysis — knowing exactly who to reach and where they actually are, before spending a dollar",
-        "Cost-efficient creative — ads/video built to convert views into clicks, not just generate impressions",
-        "A landing environment built to close — the website or form a lead hits has to convert, not just look good",
-        "Speed-to-lead and follow-up — how fast the team responds, whether it's automated, personalized, and actually logged in a CRM",
-        "Sales accountability — tracking whether reps are actually following up, and what happens to that lead after the first conversation"
+        "Targeting and market analysis",
+        "Cost-efficient, high-converting creative",
+        "A landing page environment built to convert visitors into leads",
+        "Optimizing speed-to-lead and the follow-up process",
+        "Monitoring sales accountability",
+        "And more"
       ],
-      "usage_note": "The last two bullets (speed-to-lead/follow-up and sales accountability) are the differentiator most businesses skip — don't drop them just to keep the reply short. Always still pair this playbook with one real case study citation as proof, per the normal grounding rules."
+      "usage_note": "Use the opener_template close to verbatim, filling in the visitor's actual business/industry naturally — don't paraphrase it away. The speed-to-lead/follow-up and sales-accountability bullets are the differentiator most businesses skip — don't drop them just to keep the reply short. Always still pair this playbook with one real case study citation as proof, per the normal grounding rules."
     }
   ],
   "positioning_principle": "Robert's edge isn't deep expertise in any one industry — it's that he's diagnosed and rebuilt the same core mechanics (targeting, ad copy, landing pages, backend account structure, follow-up and retention) across 50+ industries, from cybersecurity and education to automotive retail to a 45-client agency roster spanning categories as different as flood restoration, pet retail, shipbuilding, wealth management, new construction, and hospitals. What actually moves a campaign's performance is the same whether it's selling a truck or an electrician's service call — clean targeting, converting copy, a landing page that closes, an account that isn't bleeding spend on the wrong clicks. That's the discipline he brings, regardless of the product. When a visitor's exact industry isn't in the case studies, never apologize for the gap or frame it as a limitation — name the closest real case study as proof of the mechanics, and make clear the industry itself was never the hard part."
