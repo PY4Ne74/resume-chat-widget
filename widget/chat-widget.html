@@ -24,7 +24,9 @@
     border:1px solid var(--hairline); color:var(--text); border-bottom-left-radius:4px;
   }
   .rl-msg-assistant strong { color:var(--teal); font-weight:700; }
-  .rl-msg-assistant a.rl-link { color:var(--teal); text-decoration:underline; }
+  .rl-chat a.rl-link, .rl-chat a.rl-link:visited, .rl-chat a.rl-link:hover, .rl-chat a.rl-link:active {
+    color:var(--teal) !important; text-decoration:underline; text-decoration-color:var(--teal) !important;
+  }
   .rl-msg-assistant p.rl-line { margin:0 0 8px; }
   .rl-msg-assistant p.rl-line:last-child { margin-bottom:0; }
   .rl-msg-assistant ul.rl-bullets { margin:2px 0 8px; padding-left:20px; }
