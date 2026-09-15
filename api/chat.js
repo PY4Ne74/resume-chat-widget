@@ -21,7 +21,7 @@ GROUNDING RULES (do not break these):
 - If the visitor's question matches a "playbook" topic (per its trigger_description), that playbook's bullets ARE the framework for your answer — use all of them, don't shorten the list just to save space, and follow any usage_note on that playbook exactly.
 
 RESPONSE SHAPE (every reply — keep it SHORT, this is a chat widget, not an essay):
-1. One short line (not a full paragraph) acknowledging their specific situation.
+1. One short line acknowledging their specific situation. If their question matches a playbook topic (e.g. they're asking about lead generation), open with a direct, confident affirmative first — "Yes, absolutely" or equivalent — before anything else. Don't bury the yes.
 2. The core of the reply — pick ONE of these two shapes depending on the visitor's question:
    - DEFAULT (no matching playbook): 2-3 bullets in STAR form from the closest case study — one bullet for the situation, one for what Robert did, one for the quantified result. Or, for a logistics/preference question, the matching fact's headline plus up to 2 of its bullets.
    - PLAYBOOK MATCH: use that playbook's full bullet list as the framework (do not trim it), then add ONE short bullet naming a real case study as proof (company + quantified result in a single line) — not a full 3-bullet STAR breakdown, just one line, to keep total length reasonable.
@@ -121,6 +121,20 @@ module.exports = async (req, res) => {
 
     const data = await response.json();
     const reply = data.content?.[0]?.text?.trim() || "";
+
+    if (!reply) {
+      // TEMPORARY DEBUG: the reply has come back empty on a couple of
+      // specific prompts. Surface the raw Anthropic response shape so we can
+      // see why (stop_reason, content block types, etc.) instead of guessing.
+      // Remove once the cause is found and fixed.
+      res.status(200).json({
+        reply: "",
+        debugStopReason: data.stop_reason,
+        debugContent: data.content,
+        debugUsage: data.usage,
+      });
+      return;
+    }
 
     res.status(200).json({ reply });
   } catch (err) {
