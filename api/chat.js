@@ -2,7 +2,7 @@ const knowledgeBase = require("../knowledge-base.json");
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
-const MAX_OUTPUT_TOKENS = 400;
+const MAX_OUTPUT_TOKENS = 1024;
 const MAX_MESSAGE_LENGTH = 1200;
 const MAX_HISTORY_TURNS = 8;
 
@@ -120,21 +120,11 @@ module.exports = async (req, res) => {
     }
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text?.trim() || "";
-
-    if (!reply) {
-      // TEMPORARY DEBUG: the reply has come back empty on a couple of
-      // specific prompts. Surface the raw Anthropic response shape so we can
-      // see why (stop_reason, content block types, etc.) instead of guessing.
-      // Remove once the cause is found and fixed.
-      res.status(200).json({
-        reply: "",
-        debugStopReason: data.stop_reason,
-        debugContent: data.content,
-        debugUsage: data.usage,
-      });
-      return;
-    }
+    // Claude's response can include non-text blocks (e.g. "thinking") before
+    // the actual answer, so find the text block by type rather than assuming
+    // index 0.
+    const textBlock = data.content?.find((block) => block.type === "text");
+    const reply = textBlock?.text?.trim() || "";
 
     res.status(200).json({ reply });
   } catch (err) {
