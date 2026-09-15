@@ -98,8 +98,9 @@
   }
 
   // Renders plain text where lines starting with "- " become a real bullet
-  // list. Built entirely via createElement/textContent (never innerHTML with
-  // model or user text) so there's no injection risk.
+  // list, and **bold** segments become <strong>. Built entirely via
+  // createElement/textContent (never innerHTML with model or user text) so
+  // there's no injection risk.
   function renderFormattedText(container, text) {
     var lines = text.split("\n");
     var currentList = null;
@@ -112,14 +113,30 @@
           container.appendChild(currentList);
         }
         var li = document.createElement("li");
-        li.textContent = trimmed.slice(2);
+        appendInlineFormatted(li, trimmed.slice(2));
         currentList.appendChild(li);
       } else if (trimmed) {
         currentList = null;
         var p = document.createElement("p");
         p.className = "rl-line";
-        p.textContent = trimmed;
+        appendInlineFormatted(p, trimmed);
         container.appendChild(p);
+      }
+    });
+  }
+
+  // Splits on **bold** markers and appends alternating text nodes / <strong>
+  // elements to parent. No innerHTML involved, so this is safe for
+  // untrusted (model or user) text.
+  function appendInlineFormatted(parent, text) {
+    var parts = text.split(/(\*\*[^*]+\*\*)/g);
+    parts.forEach(function (part) {
+      if (part.indexOf("**") === 0 && part.lastIndexOf("**") === part.length - 2 && part.length > 4) {
+        var strong = document.createElement("strong");
+        strong.textContent = part.slice(2, -2);
+        parent.appendChild(strong);
+      } else if (part) {
+        parent.appendChild(document.createTextNode(part));
       }
     });
   }
