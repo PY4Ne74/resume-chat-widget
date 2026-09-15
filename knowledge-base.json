@@ -269,6 +269,32 @@
       ]
     },
     {
+      "id": "compensation",
+      "topic": "What's Robert's rate / salary expectation / compensation?",
+      "headline": "Compensation depends on scope — better discussed live than guessed at blind.",
+      "bullets": [
+        "Full-time salary and fractional/project rates vary widely based on scope, company stage, and what's actually needed",
+        "Rather understand your situation first than throw out a number that over- or under-shoots",
+        "Straightforward to sort out on a call once we know what we're solving for"
+      ]
+    },
+    {
+      "id": "differentiator",
+      "topic": "What makes Robert different from a typical marketing hire or agency?",
+      "headline": "Cut his teeth in car sales, where if you didn't sell a car that day, nothing else mattered — that mentality still drives everything.",
+      "bullets": [
+        "Most marketers obsess over CTR, CPC, impressions, time on site — proxy metrics that don't close deals or pay bills",
+        "Understands those metrics and the technical backend deeply (platforms, automations, how it all connects) — but never mistakes the proxy for the goal",
+        "Proof: took the lowest-performing sales department in a 26-dealer region to #1 within a year (Priority Chevrolet) — a results-only mentality applied directly to revenue, not vanity metrics"
+      ]
+    },
+    {
+      "id": "references",
+      "topic": "Does Robert have references or testimonials?",
+      "headline": "References available upon request.",
+      "bullets": []
+    },
+    {
       "id": "cross-industry-breadth",
       "topic": "Has Robert worked in my specific industry? Does that matter? Does he have B2C experience or just B2B?",
       "headline": "Worked across 50+ industries, B2B and B2C alike — proof the mechanics matter more than the product.",
