@@ -146,5 +146,78 @@
       "result": "63% (2014) and 84% (2015) YoY website traffic growth; Internet Sales grew 31% (2014) and 42% (2015); total new vehicle sales grew 16% (2014) and 13% (2015).",
       "relevant_for": ["budget optimization", "co-op advertising", "agency management", "franchise and dealer marketing", "local automotive marketing"]
     }
-  ]
+  ],
+  "facts": [
+    {
+      "id": "employment-type",
+      "topic": "What kind of work is Robert looking for — full-time, fractional, consulting?",
+      "headline": "Open to full-time, fractional, or project-based consulting — has done both.",
+      "bullets": [
+        "Full-time: builds long-term processes and compounding growth, not just a quarter's results",
+        "Fractional/consulting: full-stack marketing expertise (messaging, targeting, ads, website, CRO, upsell, AI) applied project-by-project"
+      ]
+    },
+    {
+      "id": "availability",
+      "topic": "How soon could Robert start?",
+      "headline": "Can start fractional or consulting work immediately; full-time within 1-2 weeks.",
+      "bullets": []
+    },
+    {
+      "id": "location-remote",
+      "topic": "Is Robert remote, local, or willing to relocate/travel?",
+      "headline": "Remote-only, with travel for key meetings and on-site work when needed.",
+      "bullets": []
+    },
+    {
+      "id": "why-next-challenge",
+      "topic": "Why is Robert leaving IntelliThreat / looking for something new?",
+      "headline": "4.5+ years at IntelliThreat, built the marketing function from the ground up — ready for the next challenge.",
+      "bullets": [
+        "Scaled the company 15x (10 to 150 customers across 10 countries) via a 20% lead-to-customer conversion rate",
+        "Cut website production costs $200K+ by building an in-house, AI-accelerated production pipeline",
+        "50% of new revenue sourced from a single owned LinkedIn program"
+      ]
+    },
+    {
+      "id": "company-stage-preference",
+      "topic": "What size or stage of company does Robert want to join?",
+      "headline": "Worked at every company size, from 5-person startups to 200+ employee organizations — what matters more is direct access to decision-makers.",
+      "bullets": [
+        "Prioritizes reporting directly to owners, CEOs, or presidents over navigating middle management or bureaucracy",
+        "Wants the latitude to actually implement change, regardless of company size"
+      ]
+    },
+    {
+      "id": "hands-on-vs-strategic",
+      "topic": "Is Robert hands-on or purely strategic/directing a team?",
+      "headline": "Comfortable leading a large team or executing hands-on personally — whatever the role needs.",
+      "bullets": [
+        "Has led teams as large as 25 (SEO, web, paid ads, account management specialists)",
+        "Expects team members to out-expert him in their specific lane; his job is making sure they get there",
+        "Not interested in mediocrity — building or leading, the bar is the best possible result"
+      ]
+    },
+    {
+      "id": "timeline-to-results",
+      "topic": "How long before we'd see results from bringing Robert on?",
+      "headline": "Expect visible changes within the first 30 days, then a 60/90/120-day roadmap.",
+      "bullets": [
+        "Often starts with fast, low-effort fixes (e.g., a buried call-to-action costing you leads)",
+        "Uses AI to analyze data and implement optimizations quickly",
+        "Builds a longer-term roadmap once the quick wins are in place"
+      ]
+    },
+    {
+      "id": "cross-industry-breadth",
+      "topic": "Has Robert worked in my specific industry? Does that matter?",
+      "headline": "Worked across 50+ industries — proof the mechanics matter more than the product.",
+      "bullets": [
+        "Ran a 45-client agency roster spanning categories as different as flood/water restoration, pet retail, shipbuilding, wealth management, new construction, and hospitals",
+        "Same core discipline every time: targeting, ad copy, landing pages, backend account structure, follow-up and retention",
+        "What moves performance is never the industry — it's whether the mechanics are built right"
+      ]
+    }
+  ],
+  "positioning_principle": "Robert's edge isn't deep expertise in any one industry — it's that he's diagnosed and rebuilt the same core mechanics (targeting, ad copy, landing pages, backend account structure, follow-up and retention) across 50+ industries, from cybersecurity and education to automotive retail to a 45-client agency roster spanning categories as different as flood restoration, pet retail, shipbuilding, wealth management, new construction, and hospitals. What actually moves a campaign's performance is the same whether it's selling a truck or an electrician's service call — clean targeting, converting copy, a landing page that closes, an account that isn't bleeding spend on the wrong clicks. That's the discipline he brings, regardless of the product. When a visitor's exact industry isn't in the case studies, never apologize for the gap or frame it as a limitation — name the closest real case study as proof of the mechanics, and make clear the industry itself was never the hard part."
 }

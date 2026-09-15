@@ -14,6 +14,12 @@
   .rl-msg { max-width:85%; padding:10px 14px; border-radius:12px; font-size:0.95rem; line-height:1.45; white-space:pre-wrap; }
   .rl-msg-user { align-self:flex-end; background:var(--rl-accent); color:#fff; border-bottom-right-radius:4px; }
   .rl-msg-assistant { align-self:flex-start; background:var(--rl-accent-light); color:var(--rl-text); border-bottom-left-radius:4px; }
+  .rl-msg-assistant p.rl-line { margin:0 0 8px; }
+  .rl-msg-assistant p.rl-line:last-child { margin-bottom:0; }
+  .rl-msg-assistant ul.rl-bullets { margin:2px 0 8px; padding-left:20px; }
+  .rl-msg-assistant ul.rl-bullets:last-child { margin-bottom:0; }
+  .rl-msg-assistant ul.rl-bullets li { margin-bottom:5px; }
+  .rl-msg-assistant ul.rl-bullets li:last-child { margin-bottom:0; }
   .rl-msg-error { align-self:flex-start; background:#fdecea; color:#8a1c12; }
   .rl-typing { align-self:flex-start; display:flex; gap:4px; padding:12px 14px; }
   .rl-typing span { width:6px; height:6px; border-radius:50%; background:var(--rl-muted); opacity:0.4; animation:rl-blink 1.2s infinite; }
@@ -81,10 +87,41 @@
   function addMessage(role, text) {
     var div = document.createElement("div");
     div.className = "rl-msg " + (role === "user" ? "rl-msg-user" : role === "error" ? "rl-msg-error" : "rl-msg-assistant");
-    div.textContent = text;
+    if (role === "assistant") {
+      renderFormattedText(div, text);
+    } else {
+      div.textContent = text;
+    }
     messagesEl.appendChild(div);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return div;
+  }
+
+  // Renders plain text where lines starting with "- " become a real bullet
+  // list. Built entirely via createElement/textContent (never innerHTML with
+  // model or user text) so there's no injection risk.
+  function renderFormattedText(container, text) {
+    var lines = text.split("\n");
+    var currentList = null;
+    lines.forEach(function (line) {
+      var trimmed = line.trim();
+      if (trimmed.indexOf("- ") === 0) {
+        if (!currentList) {
+          currentList = document.createElement("ul");
+          currentList.className = "rl-bullets";
+          container.appendChild(currentList);
+        }
+        var li = document.createElement("li");
+        li.textContent = trimmed.slice(2);
+        currentList.appendChild(li);
+      } else if (trimmed) {
+        currentList = null;
+        var p = document.createElement("p");
+        p.className = "rl-line";
+        p.textContent = trimmed;
+        container.appendChild(p);
+      }
+    });
   }
 
   function showTyping() {
