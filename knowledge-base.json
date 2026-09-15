@@ -259,12 +259,34 @@
       ]
     }
   ],
+  "yes_variants": [
+    "Absolutely, yes.",
+    "Yes — for sure.",
+    "Definitely, yes.",
+    "Confidently, yes.",
+    "Hands down, yes.",
+    "Without question, yes.",
+    "No doubt about it.",
+    "One hundred percent.",
+    "Easily — yes.",
+    "Certainly.",
+    "Short answer: yes.",
+    "This one's easy.",
+    "No hesitation here.",
+    "This is squarely my wheelhouse.",
+    "Count on it.",
+    "This is exactly my lane.",
+    "This is the work I've built my career on.",
+    "Without a doubt.",
+    "Happy to — yes.",
+    "This is home turf."
+  ],
   "playbooks": [
     {
       "id": "lead-generation",
       "topic": "lead generation",
       "trigger_description": "Visitor wants more leads, more inbound traffic that converts, or says their website/marketing isn't producing enough leads or customers.",
-      "opener_template": "Yes, absolutely. [Visitor's business/industry], like most other industries, relies on the same factors I've spent my career optimizing for successful lead generation campaigns.",
+      "opener_template": "[YES_VARIANT]. [Visitor's business/industry], like most other industries, relies on the same factors I've spent my career optimizing for successful lead generation campaigns.",
       "headline": "These factors include:",
       "bullets": [
         "Targeting and market analysis",
@@ -275,6 +297,101 @@
         "And more"
       ],
       "usage_note": "Use the opener_template as the intended content and confident tone, filling in the visitor's actual business/industry naturally — but adapt its exact wording to stay grammatically correct for how the visitor actually phrased their question (see the GRAMMATICAL AGREEMENT rule in the system prompt). Don't paraphrase away the substance, just the literal words when they don't fit. The speed-to-lead/follow-up and sales-accountability bullets are the differentiator most businesses skip — don't drop them just to keep the reply short. Always still pair this playbook with one real case study citation as proof, per the normal grounding rules."
+    },
+    {
+      "id": "website-cro",
+      "topic": "website / conversion rate optimization",
+      "trigger_description": "Visitor's website gets traffic but doesn't convert, or asks generally about improving their website's performance.",
+      "opener_template": "[YES_VARIANT]. Website conversion is one of the most fixable problems there is, and [visitor's business], like most others, comes down to the same handful of factors I've spent my career optimizing.",
+      "headline": "These factors include:",
+      "bullets": [
+        "Above-the-fold clarity",
+        "Call-to-action placement and visibility",
+        "Page speed and mobile experience",
+        "Form friction and checkout flow",
+        "Trust signals and social proof",
+        "Ongoing testing, not a one-time build",
+        "And more"
+      ],
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof."
+    },
+    {
+      "id": "paid-advertising",
+      "topic": "paid advertising performance",
+      "trigger_description": "Visitor's ad spend isn't converting, ROAS is poor, or they ask generally about running more profitable paid campaigns.",
+      "opener_template": "[YES_VARIANT]. Profitable ad spend for [visitor's business] runs on the same discipline regardless of industry — the factors I've spent my career optimizing for.",
+      "headline": "These factors include:",
+      "bullets": [
+        "Account structure and negative keywords",
+        "Audience and targeting precision",
+        "Creative testing cadence",
+        "Landing page match to ad intent",
+        "Tracking and attribution accuracy",
+        "Budget allocation across channels",
+        "And more"
+      ],
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof."
+    },
+    {
+      "id": "rebrand-fast-production",
+      "topic": "rebrand and fast production",
+      "trigger_description": "Visitor is launching or rebranding and needs a website, video, or marketing assets fast, often without a big budget.",
+      "opener_template": "[YES_VARIANT]. A fast, high-quality rebrand for [visitor's business] is absolutely doable without a six-figure retainer — it comes down to a few specific factors I've built my whole production approach around.",
+      "headline": "These factors include:",
+      "bullets": [
+        "Messaging and positioning first",
+        "AI-accelerated, in-house production",
+        "Speed without sacrificing quality",
+        "Protecting existing brand equity",
+        "And more"
+      ],
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof (the AI-production-pipeline or video-ad-production case studies fit especially well here)."
+    },
+    {
+      "id": "team-building-leadership",
+      "topic": "team building and marketing leadership",
+      "trigger_description": "Visitor wants to build or run a marketing function/team, or asks about hiring, managing, or leading marketing staff.",
+      "opener_template": "[YES_VARIANT]. Building a marketing function that actually delivers for [visitor's business] comes down to the same factors regardless of industry — ones I've spent my career refining.",
+      "headline": "These factors include:",
+      "bullets": [
+        "Hiring around real channel expertise",
+        "Process and accountability from day one",
+        "Right mix of in-house, agency, and AI",
+        "Coaching and mentoring team members to grow past where they started — genuinely one of my favorite parts of leading a team",
+        "Staying hands-on enough to evaluate the work",
+        "And more"
+      ],
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof. Don't drop the coaching/mentoring bullet to save space — it's a genuine personal point Robert wants made, not filler."
+    },
+    {
+      "id": "competitive-pressure",
+      "topic": "competitive pressure",
+      "trigger_description": "Visitor says competitors are outselling them or outperforming them, or asks how to close a competitive gap.",
+      "opener_template": "[YES_VARIANT]. Closing the gap on a competitor outselling [visitor's business] is rarely about working harder — it comes down to a specific, fixable set of factors.",
+      "headline": "These factors include:",
+      "bullets": [
+        "Messaging and positioning differentiation",
+        "Diagnosing where you're actually losing — awareness, consideration, or close",
+        "Competitive and market analysis",
+        "Offer and pricing positioning",
+        "Fast, focused turnarounds",
+        "And more"
+      ],
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof — the Priority Chevrolet turnaround case study is an especially strong fit here (lowest to #1 in a competitive 26-dealer region within a year)."
+    },
+    {
+      "id": "diagnostic-not-sure",
+      "topic": "diagnostic starting point for visitors who don't know what's wrong",
+      "trigger_description": "Visitor knows something is off with their marketing/sales but can't name the specific problem, or asks a very vague \"can you help my business\" question with no specifics.",
+      "opener_template": "Most businesses in this exact spot don't need more marketing yet — they need a diagnosis first.",
+      "headline": "The usual suspects:",
+      "bullets": [
+        "A traffic problem — not enough people finding you",
+        "A conversion problem — traffic doesn't become leads",
+        "A follow-up problem — leads go cold before anyone calls",
+        "A retention problem — you get the customer once but don't bring them back"
+      ],
+      "usage_note": "Structurally different from the other playbooks: no yes_variant opener (this isn't answering a yes/no question), no 'And more' (this list is meant to feel complete, not partial), and no separate closing CTA line — the diagnostic question ('Which of these sounds closest to what you're seeing?') IS the close. Skip the normal CTA ESCALATION rules for this one."
     }
   ],
   "positioning_principles": [
