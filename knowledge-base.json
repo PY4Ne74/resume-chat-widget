@@ -130,11 +130,11 @@
       "id": "accutrain-event-marketing",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "events", "training services", "b2b services"],
-      "challenge": "10 national education conferences needed stronger registration numbers and event revenue growth year over year.",
-      "action": "Directed digital marketing strategy and execution for all 10 national education conferences.",
+      "industry_tags": ["education", "events", "training services", "b2c", "consumer"],
+      "challenge": "10 national education conferences needed stronger registration numbers and event revenue growth year over year — fundamentally a consumer sale: convincing an individual educator to personally decide to travel, pay, and attend, not a top-down institutional purchase.",
+      "action": "Directed digital marketing strategy and execution for all 10 national education conferences, selling the in-person, multi-day experience entirely online — website, video, paid ads, testimonials, and email marketing.",
       "result": "Grew registrations nearly 80% over two years (2018-2019) and increased event revenue 42% in 2018 (+$358K) and 32% in 2019 (+$388K).",
-      "relevant_for": ["event marketing", "conference and registration growth", "education industry", "b2b events", "revenue growth from events"]
+      "relevant_for": ["event marketing", "conference and registration growth", "education industry", "b2c marketing", "consumer sales", "revenue growth from events"]
     },
     {
       "id": "accutrain-paid-ads-roas",
@@ -250,13 +250,20 @@
     },
     {
       "id": "cross-industry-breadth",
-      "topic": "Has Robert worked in my specific industry? Does that matter?",
-      "headline": "Worked across 50+ industries — proof the mechanics matter more than the product.",
+      "topic": "Has Robert worked in my specific industry? Does that matter? Does he have B2C experience or just B2B?",
+      "headline": "Worked across 50+ industries, B2B and B2C alike — proof the mechanics matter more than the product.",
       "bullets": [
-        "Ran a 45-client agency roster spanning categories as different as flood/water restoration, pet retail, shipbuilding, wealth management, new construction, and hospitals",
+        "B2B and consumer both covered: a 45-client agency roster spanning flood/water restoration, pet retail, shipbuilding, wealth management, new construction, hospitals, home repair, dog training, and real estate",
+        "Consumer sales experience runs deep — event/conference marketing selling directly to individual buyers, plus hands-on ownership of a restaurant",
         "Same core discipline every time: targeting, ad copy, landing pages, backend account structure, follow-up and retention",
         "What moves performance is never the industry — it's whether the mechanics are built right"
       ]
+    },
+    {
+      "id": "industry-dealbreakers",
+      "topic": "Are there industries Robert wouldn't work with?",
+      "headline": "Won't work with marijuana, gambling, or adult novelty industries.",
+      "bullets": []
     },
     {
       "id": "handling-what-doesnt-work",
