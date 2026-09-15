@@ -185,6 +185,26 @@
       "action": "Negotiated GM co-op advertising partnerships to double effective marketing spend while reducing dealership-level costs, and directed 4 marketing agencies across SEO, SEM, Display, Video, Facebook, and Email in compliance with GM Co-Op standards.",
       "result": "63% (2014) and 84% (2015) YoY website traffic growth; Internet Sales grew 31% (2014) and 42% (2015); total new vehicle sales grew 16% (2014) and 13% (2015).",
       "relevant_for": ["budget optimization", "co-op advertising", "agency management", "franchise and dealer marketing", "local automotive marketing"]
+    },
+    {
+      "id": "priority-chevrolet-crm-personalization",
+      "company": "Priority Chevrolet",
+      "role": "Internet Sales Manager → Digital Marketing Manager",
+      "industry_tags": ["automotive retail", "dealership", "local business", "crm", "email marketing"],
+      "challenge": "With 25 sales reps and heavy service-department foot traffic, most CRM data on past purchases and vehicle equity sat unused — no systematic way to flag high-value upsell opportunities to the right salesperson at the right moment.",
+      "action": "Ensured all leads flowed into the CRM and kept the sales team working in it daily, then personally data-mined it to identify customers likely in a positive equity position on their current vehicle based on purchase history and timing. Flagged those individuals to specific sales reps in real time when they came in for service, prompting a proactive upsell conversation while they waited.",
+      "result": "Turned routine service visits into upsell opportunities the dealership would otherwise have missed — a data-driven personalization tactic built directly into daily sales workflow across a 25-person team.",
+      "relevant_for": ["crm", "email marketing", "data-driven marketing", "personalization", "upselling", "sales and marketing alignment", "customer lifecycle", "automotive retail"]
+    },
+    {
+      "id": "accutrain-email-lifecycle",
+      "company": "Accutrain Corporation",
+      "role": "Digital Marketing Manager",
+      "industry_tags": ["education", "e-commerce", "email marketing", "b2c"],
+      "challenge": "An e-commerce site selling books and games to educators had no automated way to re-engage past buyers with relevant follow-up offers.",
+      "action": "Built behavioral email automation tied to purchase category — a customer buying a book in a given category was automatically enrolled in a recurring (roughly biweekly) email sequence surfacing related titles in that same category.",
+      "result": "Turned one-time e-commerce purchases into an ongoing, automated re-engagement channel without manual list management.",
+      "relevant_for": ["email marketing", "lifecycle marketing", "marketing automation", "e-commerce", "behavioral segmentation", "customer retention"]
     }
   ],
   "facts": [
@@ -388,7 +408,7 @@
         "Staying hands-on enough to evaluate the work",
         "And more"
       ],
-      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof. Don't drop the coaching/mentoring bullet to save space — it's a genuine personal point Robert wants made, not filler."
+      "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof. Don't drop the coaching/mentoring bullet to save space — it's a genuine personal point Robert wants made, not filler. If a visitor asks specifically about mentoring/coaching, the real proof point is: he hired a paid-ads intern, coached them up through paid ad specialist, and they're now a paid ads manager overseeing multiple client campaigns — someone who now knows more about paid ads than he does in that specialty. Use only if asked directly; don't force it into the standard bullet list."
     },
     {
       "id": "competitive-pressure",
@@ -429,6 +449,10 @@
     {
       "id": "technology-mastery",
       "principle": "Business today runs on an entirely digital ecosystem — website, ads, CRM, content, automation, AI. Robert optimizes every part of that ecosystem to help a business win, and he's an expert in the technology, AI, and process it actually takes to win in that world, not just participate in it. Weave this in where it's genuinely relevant (e.g. a visitor asking about AI, technology stacks, process/automation, or why a modern marketing approach matters) — it's a lens on how Robert works, not a line to force into every reply."
+    },
+    {
+      "id": "sales-marketing-integration",
+      "principle": "Marketing and sales should never operate in silos — the tightest integration between them wins. When a salesperson is in a live conversation with a prospect, every question that prospect asks is marketing intelligence: it reveals what messaging to build next, what objections to preempt in ad copy, and what confusion to clear up on the website or in the product story. If one prospect is confused about something, the broader market probably is too — that feedback loop should flow straight back into campaigns and content, not get lost after the call ends. Example mechanics: a lead comes in from marketing, becomes a meeting, and whatever the prospect is confused about or asks in that meeting becomes input for new ad angles or clearer messaging. This is why Robert frames himself as a revenue-optimization specialist, not just a marketing-optimization one. Rob specifically wants this point made as often as it's genuinely relevant — lean toward surfacing it for any question touching sales process, CRM, lead handoff, or the marketing/sales relationship, more proactively than the other positioning principles, while still not forcing it into replies where it doesn't fit."
     }
   ]
 }
