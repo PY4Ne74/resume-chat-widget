@@ -32,11 +32,41 @@ function getClientIp(req) {
   return req.socket?.remoteAddress || "unknown";
 }
 
-function buildSystemPrompt(turnNumber) {
+// Deterministic (not left to the model) URL handling. Two intents get
+// treated differently:
+// - A link to what looks like a job posting -> the model still answers
+//   naturally, just discloses it can't browse links first.
+// - Any other URL (presumably the visitor's own business site) -> a
+//   scripted lead-capture reply, no model call at all.
+const URL_REGEX = /https?:\/\/[^\s]+/i;
+const JOB_POSTING_PATTERN = /\/(jobs?|careers?|positions?|vacanc(y|ies)|openings?)\b|greenhouse\.io|lever\.co|myworkdayjobs\.com|ashbyhq\.com|workable\.com|indeed\.com|linkedin\.com\/jobs|ziprecruiter\.com|glassdoor\.com\/job|smartrecruiters\.com|jobvite\.com|breezy\.hr|icims\.com|bamboohr\.com|wellfound\.com|builtin\.com/i;
+
+function extractUrl(message) {
+  const match = message.match(URL_REGEX);
+  return match ? match[0] : null;
+}
+
+function isJobPostingUrl(url) {
+  return JOB_POSTING_PATTERN.test(url);
+}
+
+const SECURITY_DISCLAIMER = "For security reasons, I'm not authorized to visit external links.";
+
+// #form is a placeholder anchor — the contact form on the actual page this
+// widget gets embedded in must have id="form" for this link to jump there.
+function businessUrlScriptedReply() {
+  return `${SECURITY_DISCLAIMER} This looks like it might be the homepage for your business or a landing page — I'd be happy to take a look at this personally and give you some feedback. If you'd like that, [fill out the form](#form) and send me the details, and I'll review it.`;
+}
+
+function buildSystemPrompt(turnNumber, hasJobPostingUrl) {
   const kb = JSON.stringify(knowledgeBase, null, 2);
   const isFirstReply = turnNumber <= 1;
+  const jobPostingInstruction = hasJobPostingUrl
+    ? `\n\nURL IN THIS MESSAGE (looks like a job posting):\nOpen your reply with exactly this sentence, verbatim, as its own first line: "${SECURITY_DISCLAIMER}" Then continue naturally — answer using whatever context is available (the visitor's own description, any title/company visible in the URL text itself). If that's not enough to give a genuinely specific answer, ask the visitor to paste the key details (title, responsibilities, requirements) so you can give a grounded answer instead of guessing from the link alone.\n`
+    : "";
 
   return `You are a focused assistant embedded on ${knowledgeBase.person.name}'s resume website. A visitor is describing their business — its industry, target customer, and/or a goal or challenge they have. Your job is to show them, concretely, how ${knowledgeBase.person.name}'s real career experience applies to their situation, and move them toward booking a conversation.
+${jobPostingInstruction}
 
 GROUNDING RULES (do not break these):
 - You may ONLY reference facts, companies, numbers, and outcomes that appear in the DATA below (case_studies and facts). Never invent a company, client, metric, or outcome.
@@ -146,6 +176,21 @@ module.exports = async (req, res) => {
   const messages = [...safeHistory, { role: "user", content: message.trim() }];
   const turnNumber = safeHistory.filter((turn) => turn.role === "assistant").length + 1;
 
+  const url = extractUrl(message);
+  const hasJobPostingUrl = url ? isJobPostingUrl(url) : false;
+
+  // A non-job-posting URL is almost certainly the visitor's own business
+  // site — skip the model entirely and point them at the real contact form,
+  // deterministically, rather than leaving this to chance.
+  if (url && !hasJobPostingUrl) {
+    res.status(200);
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.write(businessUrlScriptedReply());
+    res.end();
+    return;
+  }
+
   try {
     const response = await fetch(ANTHROPIC_API_URL, {
       method: "POST",
@@ -157,7 +202,7 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_OUTPUT_TOKENS,
-        system: buildSystemPrompt(turnNumber),
+        system: buildSystemPrompt(turnNumber, hasJobPostingUrl),
         messages,
         stream: true,
       }),

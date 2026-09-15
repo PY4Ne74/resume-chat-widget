@@ -24,6 +24,7 @@
     border:1px solid var(--hairline); color:var(--text); border-bottom-left-radius:4px;
   }
   .rl-msg-assistant strong { color:var(--teal); font-weight:700; }
+  .rl-msg-assistant a.rl-link { color:var(--teal); text-decoration:underline; }
   .rl-msg-assistant p.rl-line { margin:0 0 8px; }
   .rl-msg-assistant p.rl-line:last-child { margin-bottom:0; }
   .rl-msg-assistant ul.rl-bullets { margin:2px 0 8px; padding-left:20px; }
@@ -175,17 +176,30 @@
     });
   }
 
-  // Splits on **bold** markers and appends alternating text nodes / <strong>
-  // elements to parent. No innerHTML involved, so this is safe for
-  // untrusted (model or user) text.
+  // Splits on **bold** markers and [text](url) links, appending real
+  // <strong>/<a> elements or plain text nodes. No innerHTML involved, so
+  // this is safe for untrusted (model or user) text. Links are limited to
+  // http(s) and same-page "#anchor" targets to rule out javascript: URLs.
   function appendInlineFormatted(parent, text) {
-    var parts = text.split(/(\*\*[^*]+\*\*)/g);
+    var parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
     parts.forEach(function (part) {
+      if (!part) return;
+      var linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (part.indexOf("**") === 0 && part.lastIndexOf("**") === part.length - 2 && part.length > 4) {
         var strong = document.createElement("strong");
         strong.textContent = part.slice(2, -2);
         parent.appendChild(strong);
-      } else if (part) {
+      } else if (linkMatch && /^(https?:\/\/|#)/i.test(linkMatch[2])) {
+        var a = document.createElement("a");
+        a.href = linkMatch[2];
+        a.textContent = linkMatch[1];
+        a.className = "rl-link";
+        if (linkMatch[2].indexOf("#") !== 0) {
+          a.target = "_blank";
+          a.rel = "noopener";
+        }
+        parent.appendChild(a);
+      } else {
         parent.appendChild(document.createTextNode(part));
       }
     });
