@@ -210,8 +210,11 @@ module.exports = async (req, res) => {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
     res.write(reply);
-    res.end();
+    // Await the log write BEFORE ending the response — Vercel can freeze the
+    // function once res.end() is called, killing any async work still
+    // in flight after it (this silently dropped the log entry when tested).
     await logExchange(conversationId, message.trim(), reply, { type: "conversation-limit" });
+    res.end();
     return;
   }
 
@@ -232,8 +235,8 @@ module.exports = async (req, res) => {
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
     res.write(reply);
-    res.end();
     await logExchange(conversationId, message.trim(), reply, { type: "business-url" });
+    res.end();
     return;
   }
 
@@ -334,10 +337,10 @@ module.exports = async (req, res) => {
       outcome = await streamAnthropicOnce();
     }
 
-    res.end();
     await logExchange(conversationId, message.trim(), outcome.fullText || "", {
       type: hasJobPostingUrl ? "job-posting-url" : "normal",
     });
+    res.end();
   } catch (err) {
     console.error("Chat handler error:", err);
     if (!res.headersSent) {
