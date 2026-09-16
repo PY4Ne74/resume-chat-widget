@@ -1,6 +1,13 @@
 # Resume chat widget — status & next-session action plan
 
-_Last updated: 2026-09-14 (session 2, late)_
+_Last updated: 2026-09-15_
+
+## Pending UI copy tweaks (not yet done — do after the current QA pass)
+- Replace the "Small business, tight budget" suggested-prompt chip — Rob flagged that framing
+  attracts visitors who likely can't afford his rate. Needs a replacement chip.
+- "Rebrand / new launch" chip — undecided, Rob said "maybe keep, maybe not."
+- Add a second small line near the "Ask Robert's AI" label along the lines of "Trained on my
+  philosophy, career experience, and real-life projects I've completed" — exact wording TBD.
 
 ## Where things stand
 
