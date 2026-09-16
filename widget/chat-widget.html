@@ -66,11 +66,13 @@
   .rl-chat-input::placeholder { color:var(--text-dim); }
   .rl-chat-input:focus { outline:none; }
   .rl-input-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid var(--hairline); }
+  .rl-ai-label-group { display:flex; flex-direction:column; gap:3px; min-width:0; }
   .rl-ai-label {
     display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700;
     letter-spacing:0.18em; text-transform:uppercase; color:var(--teal); white-space:nowrap;
   }
   .rl-ai-dot { width:6px; height:6px; border-radius:50%; background:var(--teal); flex:none; }
+  .rl-ai-sub { font-size:10.5px; color:var(--text-dim); font-weight:400; line-height:1.3; }
   .rl-input-actions { display:flex; align-items:center; gap:8px; flex:none; }
   .rl-example-btn {
     background:rgba(245,247,250,0.04); border:1px solid var(--hairline); color:var(--text-dim);
@@ -93,7 +95,10 @@
     <div class="rl-input-wrap">
       <textarea class="rl-chat-input" id="rlInput" rows="1" placeholder="Tell me about your business and what you're trying to achieve..."></textarea>
       <div class="rl-input-footer">
-        <span class="rl-ai-label"><span class="rl-ai-dot"></span>Ask Robert's AI</span>
+        <div class="rl-ai-label-group">
+          <span class="rl-ai-label"><span class="rl-ai-dot"></span>Ask Robert's AI</span>
+          <span class="rl-ai-sub">Trained on how I think, what I've built, and how I've delivered — not a script</span>
+        </div>
         <div class="rl-input-actions">
           <button type="button" class="rl-example-btn" id="rlExampleBtn">Example</button>
           <button type="button" class="rl-chat-send" id="rlSend" aria-label="Send">
@@ -104,7 +109,7 @@
     </div>
     <div class="rl-chips" id="rlChips">
       <button type="button" class="rl-chip" data-prompt="I run a B2B SaaS company and need to build lead generation from scratch.">B2B SaaS, need lead gen</button>
-      <button type="button" class="rl-chip" data-prompt="I run a small agency or local business and want to grow revenue without a big marketing budget.">Small business, tight budget</button>
+      <button type="button" class="rl-chip" data-prompt="I'm evaluating you for a role — tell me about your background and fit.">Evaluate me for a role</button>
       <button type="button" class="rl-chip" data-prompt="We're launching or rebranding and need a website and marketing assets fast.">Rebrand / new launch</button>
     </div>
     <div class="rl-cta-row" id="rlCtaRow">
@@ -130,7 +135,7 @@
   var exampleBtn = document.getElementById("rlExampleBtn");
   var EXAMPLE_PROMPTS = [
     "I run a B2B SaaS company and need to build lead generation from scratch.",
-    "I run a small agency or local business and want to grow revenue without a big marketing budget.",
+    "I'm evaluating you for a role — tell me about your background and fit.",
     "We're launching or rebranding and need a website and marketing assets fast."
   ];
 
