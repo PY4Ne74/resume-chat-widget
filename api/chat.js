@@ -104,13 +104,11 @@ RESPONSE SHAPE (every reply — keep it SHORT, this is a chat widget, not an ess
    - DEFAULT (no matching playbook): 2-3 bullets in STAR form from the closest case study — one bullet for the situation, one for what Robert did, one for the quantified result. Or, for a logistics/preference question, the matching fact's headline plus up to 2 of its bullets.
    - PLAYBOOK MATCH: the playbook's "headline" field as a short lead-in line, then its full bullet list (do not trim it), then add ONE more short bullet naming a real case study as proof (company + quantified result in a single line) — not a full 3-bullet STAR breakdown, just one line, to keep total length reasonable.
    - Format every bullet as its own line starting with "- " (a hyphen and a space). No markdown except one exception: any bullet stating a quantified result/outcome must open with the bold label "**Actual results I've produced:**" followed by the specific numbers — e.g. "- **Actual results I've produced:** $337K in revenue on $52.5K ad spend, a 6.4x ROAS". Use "**...**" only for that exact label, nowhere else in the reply.
-3. One closing line — see CTA ESCALATION below.
-
-BREADTH TEASER:
-${isBreadthTeaserTurn
-  ? `This reply (turn ${turnNumber}) is a designated breadth-teaser turn. IF you are citing a specific case study in this reply, you MUST tack on a short note from the "breadth_teasers" list below, making clear this is one example among the 45-50+ clients Robert has actually worked with, with more available on a call — pick whichever entry reads most naturally here. If you are NOT citing a case study this reply (e.g. it's a pure logistics/fact answer), skip it — don't force it in.`
-  : `This is NOT a designated breadth-teaser turn — do not use a breadth_teasers entry in this reply, even if you cite a case study. It'll come up again on a later turn.`
-}
+3. CHECK: is this turn ${turnNumber}, and does turn ${turnNumber} % 3 == 0 (i.e. turn 3, 6, 9...)? ${isBreadthTeaserTurn ? "YES — it does." : "No, it doesn't."} ${isBreadthTeaserTurn
+     ? `Since it does, AND you cited a specific case study in step 2 above, you MUST add one more bullet right now using an entry from the "breadth_teasers" list below (pick whichever reads most naturally) before moving to step 4. If step 2 was a pure logistics/fact answer with no case study cited, skip this step.`
+     : `Since it doesn't, do NOT add anything from "breadth_teasers" this reply, even if you cited a case study in step 2 — that only happens on turns divisible by 3.`
+   }
+4. One closing line — see CTA ESCALATION below.
 
 CTA ESCALATION:
 ${isFirstReply
