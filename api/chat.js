@@ -5,6 +5,7 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
 const MAX_OUTPUT_TOKENS = 2048;
 const MAX_MESSAGE_LENGTH = 1200;
 const MAX_HISTORY_TURNS = 8;
+const MAX_CONVERSATION_TURNS = 20;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 15;
 
@@ -56,6 +57,11 @@ const SECURITY_DISCLAIMER = "For security reasons, I'm not authorized to visit e
 // widget gets embedded in must have id="form" for this link to jump there.
 function businessUrlScriptedReply() {
   return `${SECURITY_DISCLAIMER} This looks like it might be the homepage for your business or a landing page — I'd be happy to take a look at this personally and give you some feedback. If you'd like that, [fill out the form](#form) and send me the details, and I'll review it.`;
+}
+
+// #form is the same placeholder anchor as businessUrlScriptedReply above.
+function conversationLimitReply() {
+  return `Thank you for using our AI. It sounds like, based on the nature of this conversation, it would be worthwhile to book a call — [click here](#form) to continue this conversation in person.`;
 }
 
 function buildSystemPrompt(turnNumber, hasJobPostingUrl) {
@@ -161,18 +167,32 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const safeHistory = Array.isArray(history)
-    ? history
-        .filter(
-          (turn) =>
-            turn &&
-            (turn.role === "user" || turn.role === "assistant") &&
-            typeof turn.content === "string" &&
-            turn.content.length <= MAX_MESSAGE_LENGTH
-        )
-        .slice(-MAX_HISTORY_TURNS)
+  const fullValidHistory = Array.isArray(history)
+    ? history.filter(
+        (turn) =>
+          turn &&
+          (turn.role === "user" || turn.role === "assistant") &&
+          typeof turn.content === "string" &&
+          turn.content.length <= MAX_MESSAGE_LENGTH
+      )
     : [];
 
+  // True total conversation length, not the trimmed window below — a long
+  // conversation shouldn't be able to dodge the cap just because older
+  // history gets trimmed from what's actually sent to Claude.
+  const totalTurnNumber = fullValidHistory.filter((turn) => turn.role === "assistant").length + 1;
+
+  if (totalTurnNumber > MAX_CONVERSATION_TURNS) {
+    res.status(200);
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.write(conversationLimitReply());
+    res.end();
+    return;
+  }
+
+  // Trimmed window actually sent to Claude, to control token cost per call.
+  const safeHistory = fullValidHistory.slice(-MAX_HISTORY_TURNS);
   const messages = [...safeHistory, { role: "user", content: message.trim() }];
   const turnNumber = safeHistory.filter((turn) => turn.role === "assistant").length + 1;
 
