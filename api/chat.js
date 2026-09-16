@@ -2,11 +2,11 @@ const knowledgeBase = require("../knowledge-base.json");
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
-const MAX_OUTPUT_TOKENS = 1024;
+const MAX_OUTPUT_TOKENS = 2048;
 const MAX_MESSAGE_LENGTH = 1200;
 const MAX_HISTORY_TURNS = 8;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 100; // TEMP: raised for a QA test batch, revert to 15 after
+const RATE_LIMIT_MAX_REQUESTS = 15;
 
 // In-memory, per-instance rate limiting. Vercel can run multiple instances
 // of this function, so this isn't a hard distributed guarantee — but it
@@ -191,7 +191,12 @@ module.exports = async (req, res) => {
     return;
   }
 
-  try {
+  // Streams one Anthropic call's text deltas to res and reports whether any
+  // text was actually produced. Occasionally the model's internal
+  // "thinking" step consumes the whole token budget before any visible text
+  // starts, which otherwise silently produces an empty reply — this return
+  // value is what lets the caller retry once instead of failing silently.
+  async function streamAnthropicOnce() {
     const response = await fetch(ANTHROPIC_API_URL, {
       method: "POST",
       headers: {
@@ -211,19 +216,21 @@ module.exports = async (req, res) => {
     if (!response.ok) {
       const errText = await response.text();
       console.error("Anthropic API error:", response.status, errText);
-      res.status(502).json({ error: "Upstream model error" });
-      return;
+      return { ok: false };
     }
 
-    // Proxy the stream to the client as plain text — only forwarding actual
-    // "text" content block deltas. Claude's stream can include a "thinking"
-    // content block before the text block; that must never reach the client.
-    res.status(200);
-    res.setHeader("Content-Type", "text/plain; charset=utf-8");
-    res.setHeader("Cache-Control", "no-cache, no-transform");
+    // Only commit response headers once we know the upstream call actually
+    // succeeded — keeps a genuine auth/billing failure able to return a
+    // proper 502 instead of being locked into an already-sent 200.
+    if (!res.headersSent) {
+      res.status(200);
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      res.setHeader("Cache-Control", "no-cache, no-transform");
+    }
 
     const blockTypes = {};
     let buffer = "";
+    let forwardedAnyText = false;
     const decoder = new TextDecoder();
     const reader = response.body.getReader();
 
@@ -253,9 +260,30 @@ module.exports = async (req, res) => {
           const isTextBlock = blockTypes[evt.index] === "text";
           if (isTextBlock && evt.delta?.type === "text_delta" && evt.delta.text) {
             res.write(evt.delta.text);
+            forwardedAnyText = true;
           }
         }
       }
+    }
+
+    return { ok: true, forwardedAnyText };
+  }
+
+  try {
+    let outcome = await streamAnthropicOnce();
+
+    if (!outcome.ok) {
+      // Genuine upstream failure on the first attempt — headers not sent yet.
+      res.status(502).json({ error: "Upstream model error" });
+      return;
+    }
+
+    // Nothing has been written to the client yet if forwardedAnyText is
+    // false, so it's safe to retry transparently — the visitor just sees a
+    // slightly longer wait, not an error.
+    if (!outcome.forwardedAnyText) {
+      console.error("Empty reply (likely thinking-only), retrying once");
+      outcome = await streamAnthropicOnce();
     }
 
     res.end();
