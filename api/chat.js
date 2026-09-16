@@ -61,7 +61,7 @@ function businessUrlScriptedReply() {
 
 // #form is the same placeholder anchor as businessUrlScriptedReply above.
 function conversationLimitReply() {
-  return `Thank you for using our AI. It sounds like, based on the nature of this conversation, it would be worthwhile to book a call — [click here](#form) to continue this conversation in person.`;
+  return `Thank you for using my AI. Based on the nature of this conversation, it will be worthwhile to book a call. [Click here](#form) to continue this conversation with me in a meeting.`;
 }
 
 function buildSystemPrompt(turnNumber, hasJobPostingUrl) {
