@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversations — Robert Lamb resume chat</title>
+<style>
+  :root {
+    --bg-1:#090C13; --bg-2:#0E121C; --text:#F5F7FA; --text-dim:#A0ACBE;
+    --teal:#5EEAD4; --hairline:#1A2030; --on-teal:#090C13;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 24px;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 60%, var(--bg-1) 100%);
+    color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  .sub { color: var(--text-dim); font-size: 0.85rem; margin: 0 0 20px; }
+  .login-box, .app { max-width: 900px; margin: 0 auto; }
+  .login-box { max-width: 360px; margin-top: 80px; text-align: center; }
+  input[type="password"] {
+    width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--hairline);
+    background: rgba(245,247,250,0.04); color: var(--text); font-size: 1rem; margin-bottom: 10px;
+  }
+  button {
+    background: var(--teal); color: var(--on-teal); border: none; border-radius: 10px;
+    padding: 11px 18px; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%;
+  }
+  button.secondary { background: transparent; color: var(--teal); border: 1px solid rgba(94,234,212,0.4); width: auto; padding: 6px 14px; font-size: 0.82rem; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .status { font-size: 0.8rem; color: var(--text-dim); }
+  .conv-list { display: flex; flex-direction: column; gap: 10px; }
+  .conv-card {
+    border: 1px solid var(--hairline); border-radius: 14px; padding: 14px 16px; cursor: pointer;
+    background: linear-gradient(150deg, rgba(245,247,250,0.04), rgba(245,247,250,0.01));
+  }
+  .conv-card:hover { border-color: rgba(94,234,212,0.35); }
+  .conv-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .conv-id { font-weight: 700; color: var(--teal); font-size: 0.95rem; }
+  .conv-time { font-size: 0.75rem; color: var(--text-dim); white-space: nowrap; }
+  .conv-preview { margin: 8px 0 0; font-size: 0.88rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .conv-meta { margin-top: 6px; font-size: 0.75rem; color: var(--text-dim); }
+  .transcript { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .transcript.open { display: block; }
+  .exchange { margin-bottom: 14px; }
+  .exchange:last-child { margin-bottom: 0; }
+  .exchange-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 3px; }
+  .exchange-user { color: var(--text); background: rgba(94,234,212,0.08); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; white-space: pre-wrap; font-size: 0.88rem; }
+  .exchange-assistant { color: var(--text); white-space: pre-wrap; font-size: 0.88rem; line-height: 1.5; }
+  .empty { color: var(--text-dim); text-align: center; padding: 60px 0; }
+</style>
+</head>
+<body>
+
+<div id="loginBox" class="login-box">
+  <h1>Conversations</h1>
+  <p class="sub">Enter the dashboard password</p>
+  <input type="password" id="passwordInput" placeholder="Password" />
+  <button id="loginBtn">View conversations</button>
+  <p class="sub" id="loginError" style="color:#EF6461;"></p>
+</div>
+
+<div id="app" class="app" style="display:none;">
+  <div class="toolbar">
+    <div>
+      <h1>Conversations</h1>
+      <p class="sub" id="subLine">Most recent first · auto-refreshes every 20s</p>
+    </div>
+    <button class="secondary" id="refreshBtn">Refresh</button>
+  </div>
+  <div id="status" class="status"></div>
+  <div id="convList" class="conv-list"></div>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = "rl_dashboard_password";
+  var loginBox = document.getElementById("loginBox");
+  var app = document.getElementById("app");
+  var passwordInput = document.getElementById("passwordInput");
+  var loginBtn = document.getElementById("loginBtn");
+  var loginError = document.getElementById("loginError");
+  var convList = document.getElementById("convList");
+  var statusEl = document.getElementById("status");
+  var refreshBtn = document.getElementById("refreshBtn");
+
+  var password = sessionStorage.getItem(STORAGE_KEY) || "";
+  var pollTimer = null;
+  var expandedIds = {};
+
+  function formatTime(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    } catch (e) {
+      return iso || "";
+    }
+  }
+
+  function renderConversations(conversations) {
+    convList.innerHTML = "";
+    if (!conversations || !conversations.length) {
+      convList.innerHTML = '<div class="empty">No conversations logged yet.</div>';
+      return;
+    }
+    conversations.forEach(function (conv) {
+      var card = document.createElement("div");
+      card.className = "conv-card";
+
+      var top = document.createElement("div");
+      top.className = "conv-top";
+      var idEl = document.createElement("span");
+      idEl.className = "conv-id";
+      idEl.textContent = "#" + conv.id;
+      var timeEl = document.createElement("span");
+      timeEl.className = "conv-time";
+      timeEl.textContent = formatTime(conv.updatedAt || conv.startedAt);
+      top.appendChild(idEl);
+      top.appendChild(timeEl);
+      card.appendChild(top);
+
+      var firstUser = conv.exchanges && conv.exchanges[0] ? conv.exchanges[0].userMessage : "(no messages yet)";
+      var preview = document.createElement("p");
+      preview.className = "conv-preview";
+      preview.textContent = firstUser;
+      card.appendChild(preview);
+
+      var meta = document.createElement("div");
+      meta.className = "conv-meta";
+      var exchangeCount = (conv.exchanges || []).length;
+      meta.textContent = exchangeCount + (exchangeCount === 1 ? " message" : " messages") + " · started " + formatTime(conv.startedAt);
+      card.appendChild(meta);
+
+      var transcript = document.createElement("div");
+      transcript.className = "transcript" + (expandedIds[conv.id] ? " open" : "");
+      (conv.exchanges || []).forEach(function (ex) {
+        var exchangeDiv = document.createElement("div");
+        exchangeDiv.className = "exchange";
+
+        var userLabel = document.createElement("div");
+        userLabel.className = "exchange-label";
+        userLabel.textContent = "Visitor · turn " + ex.turn + (ex.type && ex.type !== "normal" ? " (" + ex.type + ")" : "");
+        exchangeDiv.appendChild(userLabel);
+
+        var userMsg = document.createElement("div");
+        userMsg.className = "exchange-user";
+        userMsg.textContent = ex.userMessage;
+        exchangeDiv.appendChild(userMsg);
+
+        var assistantLabel = document.createElement("div");
+        assistantLabel.className = "exchange-label";
+        assistantLabel.textContent = "Assistant";
+        exchangeDiv.appendChild(assistantLabel);
+
+        var assistantMsg = document.createElement("div");
+        assistantMsg.className = "exchange-assistant";
+        assistantMsg.textContent = ex.assistantReply;
+        exchangeDiv.appendChild(assistantMsg);
+
+        transcript.appendChild(exchangeDiv);
+      });
+      card.appendChild(transcript);
+
+      card.addEventListener("click", function () {
+        var isOpen = transcript.classList.toggle("open");
+        expandedIds[conv.id] = isOpen;
+      });
+
+      convList.appendChild(card);
+    });
+  }
+
+  function loadConversations() {
+    statusEl.textContent = "Loading...";
+    fetch("/api/conversations", { headers: { Authorization: "Bearer " + password } })
+      .then(function (res) {
+        if (res.status === 401) {
+          showLogin("Password incorrect — try again.");
+          sessionStorage.removeItem(STORAGE_KEY);
+          throw new Error("unauthorized");
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (data.configured === false) {
+          statusEl.textContent = "Storage isn't connected yet on the server side.";
+          convList.innerHTML = "";
+          return;
+        }
+        statusEl.textContent = "Updated " + new Date().toLocaleTimeString();
+        renderConversations(data.conversations || []);
+      })
+      .catch(function (err) {
+        if (err.message !== "unauthorized") {
+          statusEl.textContent = "Couldn't load conversations — will retry.";
+        }
+      });
+  }
+
+  function showApp() {
+    loginBox.style.display = "none";
+    app.style.display = "block";
+    loadConversations();
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(loadConversations, 20000);
+  }
+
+  function showLogin(message) {
+    app.style.display = "none";
+    loginBox.style.display = "block";
+    loginError.textContent = message || "";
+    if (pollTimer) clearInterval(pollTimer);
+  }
+
+  loginBtn.addEventListener("click", function () {
+    password = passwordInput.value;
+    sessionStorage.setItem(STORAGE_KEY, password);
+    showApp();
+  });
+  passwordInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") loginBtn.click();
+  });
+  refreshBtn.addEventListener("click", loadConversations);
+
+  if (password) {
+    showApp();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 const knowledgeBase = require("../knowledge-base.json");
+const { startConversation, logExchange } = require("../lib/kv.js");
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
@@ -135,6 +136,10 @@ function setCors(res) {
   res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  // Custom response headers are hidden from client-side fetch() under CORS
+  // unless explicitly exposed — needed so the widget can read the
+  // conversation ID back out of the response.
+  res.setHeader("Access-Control-Expose-Headers", "X-Conversation-Id");
 }
 
 module.exports = async (req, res) => {
@@ -160,7 +165,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { message, history } = req.body || {};
+  const { message, history, conversationId: incomingConversationId } = req.body || {};
 
   if (typeof message !== "string" || !message.trim()) {
     res.status(400).json({ error: "Missing message" });
@@ -170,6 +175,18 @@ module.exports = async (req, res) => {
   if (message.length > MAX_MESSAGE_LENGTH) {
     res.status(400).json({ error: "Message too long" });
     return;
+  }
+
+  // Only accept a conversationId shaped like the ones we actually issue
+  // (5 digits) — anything else is treated as a new conversation rather than
+  // trusting arbitrary client input.
+  const validIncomingId =
+    typeof incomingConversationId === "string" && /^\d{5}$/.test(incomingConversationId)
+      ? incomingConversationId
+      : null;
+  const conversationId = validIncomingId || (await startConversation(message.trim()));
+  if (conversationId) {
+    res.setHeader("X-Conversation-Id", conversationId);
   }
 
   const fullValidHistory = Array.isArray(history)
@@ -188,11 +205,13 @@ module.exports = async (req, res) => {
   const totalTurnNumber = fullValidHistory.filter((turn) => turn.role === "assistant").length + 1;
 
   if (totalTurnNumber > MAX_CONVERSATION_TURNS) {
+    const reply = conversationLimitReply();
     res.status(200);
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
-    res.write(conversationLimitReply());
+    res.write(reply);
     res.end();
+    await logExchange(conversationId, message.trim(), reply, { type: "conversation-limit" });
     return;
   }
 
@@ -208,11 +227,13 @@ module.exports = async (req, res) => {
   // site — skip the model entirely and point them at the real contact form,
   // deterministically, rather than leaving this to chance.
   if (url && !hasJobPostingUrl) {
+    const reply = businessUrlScriptedReply();
     res.status(200);
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "no-cache, no-transform");
-    res.write(businessUrlScriptedReply());
+    res.write(reply);
     res.end();
+    await logExchange(conversationId, message.trim(), reply, { type: "business-url" });
     return;
   }
 
@@ -256,6 +277,7 @@ module.exports = async (req, res) => {
     const blockTypes = {};
     let buffer = "";
     let forwardedAnyText = false;
+    let fullText = "";
     const decoder = new TextDecoder();
     const reader = response.body.getReader();
 
@@ -286,12 +308,13 @@ module.exports = async (req, res) => {
           if (isTextBlock && evt.delta?.type === "text_delta" && evt.delta.text) {
             res.write(evt.delta.text);
             forwardedAnyText = true;
+            fullText += evt.delta.text;
           }
         }
       }
     }
 
-    return { ok: true, forwardedAnyText };
+    return { ok: true, forwardedAnyText, fullText };
   }
 
   try {
@@ -312,6 +335,9 @@ module.exports = async (req, res) => {
     }
 
     res.end();
+    await logExchange(conversationId, message.trim(), outcome.fullText || "", {
+      type: hasJobPostingUrl ? "job-posting-url" : "normal",
+    });
   } catch (err) {
     console.error("Chat handler error:", err);
     if (!res.headersSent) {

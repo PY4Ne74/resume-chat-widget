@@ -136,6 +136,7 @@
 
   var history = [];
   var sending = false;
+  var conversationId = null; // assigned by the server on the first message
 
   function addMessage(role, text) {
     var div = document.createElement("div");
@@ -239,8 +240,11 @@
       var res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text.trim(), history: history })
+        body: JSON.stringify({ message: text.trim(), history: history, conversationId: conversationId })
       });
+
+      var returnedConversationId = res.headers.get("X-Conversation-Id");
+      if (returnedConversationId) conversationId = returnedConversationId;
 
       var contentType = res.headers.get("Content-Type") || "";
 
