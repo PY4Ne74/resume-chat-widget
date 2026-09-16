@@ -6,7 +6,7 @@ const MAX_OUTPUT_TOKENS = 1024;
 const MAX_MESSAGE_LENGTH = 1200;
 const MAX_HISTORY_TURNS = 8;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 15;
+const RATE_LIMIT_MAX_REQUESTS = 100; // TEMP: raised for a QA test batch, revert to 15 after
 
 // In-memory, per-instance rate limiting. Vercel can run multiple instances
 // of this function, so this isn't a hard distributed guarantee — but it
