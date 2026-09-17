@@ -311,7 +311,7 @@
     loadAvailability();
     poll();
     if (pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(poll, 3000);
+    pollTimer = setInterval(poll, 1500);
   }
 
   function showLogin(message) {
