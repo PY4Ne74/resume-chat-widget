@@ -108,6 +108,8 @@
       <span class="toggle-track"></span>
     </label>
   </div>
+  <button class="secondary" id="joinRoomBtn" style="width:auto; padding:9px 16px; margin-bottom:4px;">Join your Meet room</button>
+  <p class="perm-hint">Important: flipping the toggle on only tells visitors you're available — it doesn't put you in the call. Click "Join your Meet room" too and leave that tab open (mic/camera off is fine) so nobody lands in an empty-looking meeting.</p>
   <p class="perm-hint" id="permHint"></p>
 
   <div class="notif-banner" id="notifBanner">
@@ -148,6 +150,7 @@
   var notifSub = document.getElementById("notifSub");
   var joinBtn = document.getElementById("joinBtn");
   var dismissBtn = document.getElementById("dismissBtn");
+  var joinRoomBtn = document.getElementById("joinRoomBtn");
   var logList = document.getElementById("logList");
   var refreshBtn = document.getElementById("refreshBtn");
 
@@ -212,9 +215,18 @@
       .then(function (data) { setAvailabilityUI(data.available); });
   }
 
+  joinRoomBtn.addEventListener("click", function () {
+    window.open(MEET_URL, "_blank");
+  });
+
   availToggle.addEventListener("change", function () {
     var available = availToggle.checked;
     setAvailabilityUI(available); // optimistic
+    if (available) {
+      // Flipping on means "I'm live" — open the room automatically so
+      // there's no gap where a visitor could land in an empty meeting.
+      window.open(MEET_URL, "_blank");
+    }
     fetch("/api/availability", {
       method: "POST",
       headers: authHeaders(),
