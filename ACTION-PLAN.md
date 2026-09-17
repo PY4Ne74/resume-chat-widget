@@ -119,6 +119,73 @@ genuinely true, not just planned — this checklist has not been re-verified sin
 
 ---
 
+## "Talk now" — live voice intercom (new, built 2026-09-16)
+
+The bottom-right intercom-style widget Rob asked for: a floating mic bubble a visitor can
+click to jump straight into a live conversation with Rob, no Chrome extension required —
+WebRTC/mic access is native to every browser, so the only real problem to solve was
+**getting the call to reach Rob**, not getting the visitor connected. Phase 1 implementation
+uses a Google Meet handoff rather than a fully custom in-browser WebRTC call (see the
+Architecture note below for why, and what Phase 2 would look like).
+
+### How it works
+1. Rob opens `public/control-room.html`, logs in with `DASHBOARD_PASSWORD` (same password as
+   the conversation dashboard), and flips "Available" on while he's at his computer. This is
+   the dynamic on/off switch Rob asked for — the widget only shows the live option when this
+   is on.
+2. `widget/talk-now-widget.html` — a separate floating bubble (bottom-right, independent of
+   the hero chat widget) — polls `GET /api/availability` every 30s. Live → pulsing teal
+   "Talk to Robert now" button. Away → "Book a call with Robert" button linking to
+   `CALENDLY_URL` instead, so the bubble is never a dead end.
+3. Visitor clicks while live: the Google Meet link opens in a new tab **synchronously with
+   the click** (so popup blockers don't intervene), then `POST /api/talk-now` fires in the
+   background to log the click and trigger Rob's alert.
+4. The control room page polls `GET /api/talk-now-poll` every 3s while open and, on a new
+   click, plays a two-tone chime (Web Audio API, no audio file needed), fires a desktop
+   `Notification` if permission was granted, and shows an on-page banner with a "Join Meet"
+   button — this is the "fastest way to reach him at the computer" Rob asked for, no phone
+   push service needed since he keeps the tab open while available. A running log below shows
+   every click, tagged "answered live" or "missed — you were away."
+
+### Architecture note — why Google Meet handoff instead of a custom WebRTC widget
+A visitor never needs a Chrome extension — `getUserMedia`/WebRTC mic access is built into
+every modern browser. The actual hard part of a true in-widget voice bubble (like Intercom's)
+is presence + signaling infrastructure so Rob's browser can receive an incoming call, which
+is a much bigger build (a signaling server, TURN for NAT traversal, a persistent "listening"
+client). The Meet handoff gets 90% of the experience — instant, live, zero-install for the
+visitor — using Google's existing call infrastructure, buildable in one session. If usage
+validates the idea, Phase 2 would replace the Meet redirect with an embedded WebRTC widget
+(e.g. Daily.co/Twilio) so the call never leaves the page.
+
+### Meet link — filled in (2026-09-16)
+`https://meet.google.com/fax-fpax-onr` — Rob's persistent "Create a meeting for later" room
+(meet.google.com → New → Create a meeting for later; doesn't expire, reusable indefinitely).
+Set as `MEET_URL` in both `widget/talk-now-widget.html` and `public/control-room.html` — keep
+these two in sync if it's ever regenerated.
+
+There is deliberately **no "book a call" fallback** for this feature (Rob's call) — the
+widget bubble is fully hidden whenever he's marked Away, rather than degrading to a Calendly
+link. `CALENDLY_URL` was removed from `talk-now-widget.html` accordingly; it still lives
+separately in `widget/chat-widget.html` for the hero chat's own CTA, unrelated to this.
+
+### New KV keys (same Upstash Redis store, no new service)
+`talknow:availability` (current on/off + timestamp), `talknow:ping:counter` /
+`talknow:ping:<n>` / `talknow:ping:index` (click log, same recency-index pattern as
+conversation logging). Degrades the same way as chat logging — if KV isn't configured, the
+availability endpoint fails closed to "away" rather than erroring.
+
+### Not yet done
+- [ ] Paste `widget/talk-now-widget.html` into its own Elementor HTML widget on the site
+  (bottom-right, independent of the hero chat widget's own container)
+- [ ] Rob needs to actually open `control-room.html` and grant desktop notification
+  permission once, from the real device he'll be working at
+- [ ] Test end-to-end with a second device/incognito tab before relying on it for real traffic
+- [ ] Push these new files (`api/availability.js`, `api/talk-now.js`, `api/talk-now-poll.js`,
+  `public/control-room.html`, `widget/talk-now-widget.html`, plus the `lib/kv.js` additions) —
+  same manual "Push origin" in GitHub Desktop as everything else in this project
+
+---
+
 ## Next steps, roughly in priority order
 
 1. **Run the pre-launch verification checklist above** once the outreach-stack work is actually

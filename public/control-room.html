@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control Room — Robert Lamb resume site</title>
+<style>
+  :root {
+    --bg-1:#090C13; --bg-2:#0E121C; --text:#F5F7FA; --text-dim:#A0ACBE;
+    --teal:#5EEAD4; --hairline:#1A2030; --on-teal:#090C13; --red:#EF6461;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 24px;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 60%, var(--bg-1) 100%);
+    color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  .sub { color: var(--text-dim); font-size: 0.85rem; margin: 0 0 20px; }
+  .login-box, .app { max-width: 900px; margin: 0 auto; }
+  .login-box { max-width: 360px; margin-top: 80px; text-align: center; }
+  input[type="password"] {
+    width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--hairline);
+    background: rgba(245,247,250,0.04); color: var(--text); font-size: 1rem; margin-bottom: 10px;
+  }
+  button {
+    background: var(--teal); color: var(--on-teal); border: none; border-radius: 10px;
+    padding: 11px 18px; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%;
+  }
+  button.secondary { background: transparent; color: var(--teal); border: 1px solid rgba(94,234,212,0.4); width: auto; padding: 6px 14px; font-size: 0.82rem; }
+
+  .status-card {
+    border: 1px solid var(--hairline); border-radius: 16px; padding: 20px;
+    background: linear-gradient(150deg, rgba(245,247,250,0.04), rgba(245,247,250,0.01));
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px;
+  }
+  .status-left { display: flex; align-items: center; gap: 12px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+  .dot.on { background: var(--teal); box-shadow: 0 0 10px rgba(94,234,212,0.7); }
+  .status-title { font-weight: 700; font-size: 1.05rem; }
+  .status-sub { color: var(--text-dim); font-size: 0.8rem; margin-top: 2px; }
+
+  .toggle { position: relative; width: 52px; height: 30px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0; background: rgba(245,247,250,0.12); border-radius: 999px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .toggle-track:before {
+    content: ""; position: absolute; width: 24px; height: 24px; left: 3px; top: 3px;
+    background: var(--text); border-radius: 50%; transition: transform 0.15s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--teal); }
+  .toggle input:checked + .toggle-track:before { transform: translateX(22px); background: var(--on-teal); }
+
+  .notif-banner {
+    display: none; border: 1px solid rgba(94,234,212,0.5); border-radius: 16px; padding: 18px 20px;
+    background: linear-gradient(150deg, rgba(94,234,212,0.14), rgba(94,234,212,0.03));
+    margin-bottom: 20px; animation: pulse 1.4s ease-in-out infinite;
+  }
+  .notif-banner.show { display: block; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 rgba(94,234,212,0); } 50% { box-shadow: 0 0 24px rgba(94,234,212,0.35); } }
+  .notif-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+  .notif-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 14px; }
+  .notif-actions { display: flex; gap: 10px; }
+  .notif-actions button { width: auto; padding: 10px 18px; }
+  .notif-actions button.secondary { background: transparent; }
+
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .log-list { display: flex; flex-direction: column; gap: 8px; }
+  .log-row {
+    border: 1px solid var(--hairline); border-radius: 12px; padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;
+  }
+  .log-row .page { color: var(--text-dim); }
+  .log-row .time { color: var(--text-dim); font-size: 0.75rem; white-space: nowrap; }
+  .badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .badge.hit { background: rgba(94,234,212,0.15); color: var(--teal); }
+  .badge.miss { background: rgba(239,100,97,0.15); color: var(--red); }
+  .empty { color: var(--text-dim); text-align: center; padding: 40px 0; }
+  .perm-hint { color: var(--text-dim); font-size: 0.78rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div id="loginBox" class="login-box">
+  <h1>Control Room</h1>
+  <p class="sub">Enter the dashboard password</p>
+  <input type="password" id="passwordInput" placeholder="Password" />
+  <button id="loginBtn">Enter</button>
+  <p class="sub" id="loginError" style="color:#EF6461;"></p>
+</div>
+
+<div id="app" class="app" style="display:none;">
+  <h1>Control Room</h1>
+  <p class="sub">Keep this tab open while you're at your computer and willing to take a live call.</p>
+
+  <div class="status-card">
+    <div class="status-left">
+      <span class="dot" id="statusDot"></span>
+      <div>
+        <div class="status-title" id="statusTitle">Away</div>
+        <div class="status-sub" id="statusSub">Visitors won't see a live-call option</div>
+      </div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="availToggle">
+      <span class="toggle-track"></span>
+    </label>
+  </div>
+  <p class="perm-hint" id="permHint"></p>
+
+  <div class="notif-banner" id="notifBanner">
+    <div class="notif-title">Someone wants to talk right now</div>
+    <div class="notif-sub" id="notifSub"></div>
+    <div class="notif-actions">
+      <button id="joinBtn">Join Meet</button>
+      <button class="secondary" id="dismissBtn">Dismiss</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <h1 style="font-size:1.05rem;">Recent activity</h1>
+    <button class="secondary" id="refreshBtn">Refresh</button>
+  </div>
+  <div id="logList" class="log-list"></div>
+</div>
+
+<script>
+(function () {
+  // ---- CONFIG: same Meet link used in widget/talk-now-widget.html ----
+  var MEET_URL = "https://meet.google.com/fax-fpax-onr";
+  // ---------------------------------------------------------------------
+
+  var STORAGE_KEY = "rl_dashboard_password";
+  var SEEN_KEY = "rl_control_room_last_seen_ping";
+  var loginBox = document.getElementById("loginBox");
+  var app = document.getElementById("app");
+  var passwordInput = document.getElementById("passwordInput");
+  var loginBtn = document.getElementById("loginBtn");
+  var loginError = document.getElementById("loginError");
+  var availToggle = document.getElementById("availToggle");
+  var statusDot = document.getElementById("statusDot");
+  var statusTitle = document.getElementById("statusTitle");
+  var statusSub = document.getElementById("statusSub");
+  var permHint = document.getElementById("permHint");
+  var notifBanner = document.getElementById("notifBanner");
+  var notifSub = document.getElementById("notifSub");
+  var joinBtn = document.getElementById("joinBtn");
+  var dismissBtn = document.getElementById("dismissBtn");
+  var logList = document.getElementById("logList");
+  var refreshBtn = document.getElementById("refreshBtn");
+
+  var password = sessionStorage.getItem(STORAGE_KEY) || "";
+  var pollTimer = null;
+  var lastSeenId = parseInt(localStorage.getItem(SEEN_KEY) || "0", 10);
+
+  function authHeaders() {
+    return { Authorization: "Bearer " + password, "Content-Type": "application/json" };
+  }
+
+  function formatTime(iso) {
+    try {
+      return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" });
+    } catch (e) { return iso || ""; }
+  }
+
+  function playChime() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [880, 1108].forEach(function (freq, i) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + i * 0.18 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.18 + 0.4);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime + i * 0.18);
+        osc.stop(ctx.currentTime + i * 0.18 + 0.4);
+      });
+    } catch (e) { /* audio not available — banner + notification still fire */ }
+  }
+
+  function notifyDesktop(text) {
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "granted") {
+      new Notification("Talk now — resume site", { body: text });
+    }
+  }
+
+  function showBanner(ping) {
+    notifSub.textContent = (ping.page ? "From: " + ping.page + " — " : "") + formatTime(ping.timestamp);
+    notifBanner.classList.add("show");
+    playChime();
+    notifyDesktop(ping.page ? "Someone on " + ping.page + " wants to talk now." : "Someone wants to talk now.");
+  }
+
+  function setAvailabilityUI(available) {
+    availToggle.checked = !!available;
+    statusDot.classList.toggle("on", !!available);
+    statusTitle.textContent = available ? "Available" : "Away";
+    statusSub.textContent = available
+      ? "Visitors see a live \"Talk now\" option"
+      : "Visitors won't see a live-call option";
+  }
+
+  function loadAvailability() {
+    fetch("/api/availability", { headers: authHeaders() })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { setAvailabilityUI(data.available); });
+  }
+
+  availToggle.addEventListener("change", function () {
+    var available = availToggle.checked;
+    setAvailabilityUI(available); // optimistic
+    fetch("/api/availability", {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ available: available }),
+    })
+      .then(function (r) {
+        if (r.status === 401) { showLogin("Session expired — log in again."); return; }
+        return r.json();
+      })
+      .then(function (data) { if (data) setAvailabilityUI(data.available); })
+      .catch(function () { loadAvailability(); });
+  });
+
+  joinBtn.addEventListener("click", function () {
+    window.open(MEET_URL, "_blank");
+    notifBanner.classList.remove("show");
+  });
+  dismissBtn.addEventListener("click", function () {
+    notifBanner.classList.remove("show");
+  });
+
+  function renderLog(pings) {
+    logList.innerHTML = "";
+    if (!pings || !pings.length) {
+      logList.innerHTML = '<div class="empty">No clicks yet.</div>';
+      return;
+    }
+    pings.forEach(function (p) {
+      var row = document.createElement("div");
+      row.className = "log-row";
+      var left = document.createElement("div");
+      var badge = document.createElement("span");
+      badge.className = "badge " + (p.wasAvailable ? "hit" : "miss");
+      badge.textContent = p.wasAvailable ? "answered live" : "missed — you were away";
+      left.appendChild(badge);
+      var page = document.createElement("span");
+      page.className = "page";
+      page.style.marginLeft = "10px";
+      page.textContent = p.page || "";
+      left.appendChild(page);
+      var time = document.createElement("span");
+      time.className = "time";
+      time.textContent = formatTime(p.timestamp);
+      row.appendChild(left);
+      row.appendChild(time);
+      logList.appendChild(row);
+    });
+  }
+
+  function poll() {
+    fetch("/api/talk-now-poll", { headers: authHeaders() })
+      .then(function (r) {
+        if (r.status === 401) { showLogin("Session expired — log in again."); throw new Error("unauthorized"); }
+        return r.json();
+      })
+      .then(function (data) {
+        if (data.configured === false) return;
+        var pings = data.pings || [];
+        renderLog(pings);
+        if (pings.length) {
+          var newest = pings[0];
+          if (newest.id > lastSeenId) {
+            lastSeenId = newest.id;
+            localStorage.setItem(SEEN_KEY, String(lastSeenId));
+            if (newest.wasAvailable) showBanner(newest);
+          }
+        }
+      })
+      .catch(function () {});
+  }
+
+  function showApp() {
+    loginBox.style.display = "none";
+    app.style.display = "block";
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().then(function (perm) {
+        permHint.textContent = perm === "granted"
+          ? ""
+          : "Desktop notifications are blocked — you'll still get the sound + banner while this tab is open.";
+      });
+    }
+    loadAvailability();
+    poll();
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(poll, 3000);
+  }
+
+  function showLogin(message) {
+    app.style.display = "none";
+    loginBox.style.display = "block";
+    loginError.textContent = message || "";
+    if (pollTimer) clearInterval(pollTimer);
+  }
+
+  loginBtn.addEventListener("click", function () {
+    password = passwordInput.value;
+    sessionStorage.setItem(STORAGE_KEY, password);
+    showApp();
+  });
+  passwordInput.addEventListener("keydown", function (e) { if (e.key === "Enter") loginBtn.click(); });
+  refreshBtn.addEventListener("click", poll);
+
+  if (password) showApp();
+})();
+</script>
+</body>
+</html>
