@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talk Now — Test Page</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #F5F7FA;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0E121C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rltn-test-note {
+    max-width: 440px;
+    padding: 24px 28px;
+    text-align: center;
+  }
+  .rltn-test-note h1 { font-size: 1.1rem; margin-bottom: 8px; }
+  .rltn-test-note p { font-size: 0.9rem; line-height: 1.5; color: #4B5566; }
+</style>
+</head>
+<body>
+
+<div class="rltn-test-note">
+  <h1>Talk Now — test page</h1>
+  <p>
+    This page exists only to test the "Talk to Robert now" bubble before it
+    goes into Elementor. It's not linked from anywhere and not indexed.
+    The bubble in the bottom-right behaves exactly as it would on the real
+    site — flip "Available" on in the <a href="/control-room.html">control room</a>
+    to make it appear here.
+  </p>
+</div>
+
+<style>
+  .rltn-wrap { position: fixed; right: 20px; bottom: 20px; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .rltn-bubble {
+    display: flex; align-items: center; gap: 10px; border: none; cursor: pointer;
+    border-radius: 999px; padding: 13px 18px 13px 14px; font-size: 0.9rem; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35); transition: transform 0.15s, box-shadow 0.15s;
+    background: #0E121C; color: #F5F7FA; border: 1px solid #1A2030;
+  }
+  .rltn-bubble:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.45); }
+  .rltn-bubble.rltn-live { background: linear-gradient(135deg, #0E121C, #101a1c); border-color: rgba(94,234,212,0.5); }
+  .rltn-bubble:disabled { cursor: default; opacity: 0.85; }
+  .rltn-dot-wrap { position: relative; width: 14px; height: 14px; flex-shrink: 0; }
+  .rltn-dot { position: absolute; inset: 0; border-radius: 50%; background: #A0ACBE; }
+  .rltn-live .rltn-dot { background: #5EEAD4; }
+  .rltn-live .rltn-dot-ping {
+    position: absolute; inset: 0; border-radius: 50%; background: #5EEAD4;
+    animation: rltn-ping 1.6s cubic-bezier(0,0,0.2,1) infinite;
+  }
+  @keyframes rltn-ping { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.6); opacity: 0; } }
+  .rltn-icon { flex-shrink: 0; display: flex; }
+  .rltn-hidden { display: none !important; }
+  @media (max-width: 480px) {
+    .rltn-wrap { right: 12px; bottom: 12px; }
+    .rltn-bubble { padding: 12px 16px 12px 12px; font-size: 0.85rem; }
+  }
+</style>
+
+<div class="rltn-wrap rltn-hidden" id="rltnWrap">
+  <button type="button" class="rltn-bubble" id="rltnBubble">
+    <span class="rltn-dot-wrap">
+      <span class="rltn-dot"></span>
+      <span class="rltn-dot-ping" id="rltnPing"></span>
+    </span>
+    <span class="rltn-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </span>
+    <span id="rltnLabel">Talk to Robert now</span>
+  </button>
+</div>
+
+<script>
+(function () {
+  // ---- CONFIG ----
+  var API_BASE = "https://resume-chat-widget.vercel.app";
+  var MEET_URL = "https://meet.google.com/fax-fpax-onr";
+  var POLL_INTERVAL_MS = 30000;
+  // -----------------
+
+  var wrap = document.getElementById("rltnWrap");
+  var bubble = document.getElementById("rltnBubble");
+  var ping = document.getElementById("rltnPing");
+  var label = document.getElementById("rltnLabel");
+
+  var state = "unknown"; // unknown | live | away
+  var busy = false;
+
+  // Away and unknown both hide the bubble entirely — there's no fallback
+  // destination for this feature, so it only ever appears when Robert is
+  // actually live.
+  function setState(next) {
+    state = next;
+    if (state !== "live") {
+      wrap.classList.add("rltn-hidden");
+      return;
+    }
+    wrap.classList.remove("rltn-hidden");
+    bubble.classList.add("rltn-live");
+    ping.style.display = "";
+    label.textContent = "Talk to Robert now";
+    bubble.disabled = false;
+  }
+
+  function checkAvailability() {
+    fetch(API_BASE + "/api/availability")
+      .then(function (r) { return r.json(); })
+      .then(function (data) { if (!busy) setState(data.available ? "live" : "away"); })
+      .catch(function () { /* leave current state on network error */ });
+  }
+
+  function pingServer() {
+    try {
+      fetch(API_BASE + "/api/talk-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ page: window.location.href }),
+      }).catch(function () {});
+    } catch (e) { /* best-effort */ }
+  }
+
+  bubble.addEventListener("click", function () {
+    if (busy || state !== "live") return;
+    // Open first, synchronously with the click, so popup blockers don't
+    // intervene — then notify the server in the background.
+    window.open(MEET_URL, "_blank", "noopener");
+    pingServer();
+    busy = true;
+    label.textContent = "Connecting you now...";
+    setTimeout(function () {
+      busy = false;
+      checkAvailability();
+    }, 4000);
+  });
+
+  checkAvailability();
+  setInterval(checkAvailability, POLL_INTERVAL_MS);
+})();
+</script>
+
+</body>
+</html>
