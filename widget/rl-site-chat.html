@@ -78,6 +78,34 @@
     if (bookLink) { bookLink.href = BOOKING_URL; bookLink.target = "_blank"; bookLink.rel = "noopener"; }
   }
 
+  /* ---- GA4 / dataLayer tracking --------------------------------------- *
+   * Routes through window.rlTrack from the "RL · Tracking" snippet so chat
+   * events take the exact same dataLayer + gtag path as resume_download,
+   * schedule_click and the rest — one convention, not two.
+   *
+   * Resolved at CALL time, not init time, on purpose: RL · Chat runs at
+   * priority 10 and RL · Tracking at 11, so rlTrack does not exist yet when
+   * this file first executes. It always does by the time a visitor types.
+   * Falls back to its own push if that snippet is ever removed.
+   *
+   * The visitor's typed text is deliberately NEVER sent to GA4 — only its
+   * length. Chip labels are our own static copy, so those are safe.        */
+
+  function track(name, params) {
+    params = params || {};
+    try {
+      if (typeof window.rlTrack === "function") { window.rlTrack(name, params); return; }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: name }, params));
+      if (typeof window.gtag === "function") window.gtag("event", name, params);
+    } catch (e) {}
+  }
+
+  var messageCount = 0;
+  var startFired = false;
+  var engagedFired = false;
+  var ENGAGED_AT_TURN = 3;
+
   /* ---- Rendering (ported from the tested widget) --------------------- *
    * Everything is built with createElement/textContent. Model and visitor
    * text never touches innerHTML, so there is no injection path.          */
@@ -154,7 +182,7 @@
 
   /* ---- The actual call ----------------------------------------------- */
 
-  async function send(text) {
+  async function send(text, entryPoint) {
     text = (text || "").trim();
     if (!text || sending) return;
 
@@ -164,6 +192,15 @@
     if (askInput) askInput.value = "";
     setSending(true);
     showTyping();
+
+    messageCount++;
+    var evt = {
+      entry_point: entryPoint || "panel_form",
+      turn: messageCount,
+      message_length: text.length
+    };
+    if (conversationId) evt.conversation_id = conversationId;
+    track("chat_message", evt);
 
     try {
       var res = await fetch(API_URL, {
@@ -175,10 +212,29 @@
       var cid = res.headers.get("X-Conversation-Id");
       if (cid) conversationId = cid;
 
+      // Fired here rather than before the call so the conversation_id is
+      // attached — that id is what ties a GA4 event back to the full
+      // transcript in the dashboard.
+      if (!startFired) {
+        startFired = true;
+        track("chat_start", {
+          entry_point: entryPoint || "panel_form",
+          conversation_id: conversationId || ""
+        });
+      }
+      if (!engagedFired && messageCount >= ENGAGED_AT_TURN) {
+        engagedFired = true;
+        track("chat_engaged", {
+          turn: messageCount,
+          conversation_id: conversationId || ""
+        });
+      }
+
       // Errors come back as JSON; a good reply is a raw text stream.
       var ct = res.headers.get("Content-Type") || "";
       if (!res.ok || ct.indexOf("application/json") !== -1) {
         hideTyping();
+        track("chat_error", { reason: "bad_response", status: res.status });
         addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
         return;
       }
@@ -209,6 +265,7 @@
 
       if (!streamEl || !full.trim()) {
         hideTyping();
+        track("chat_error", { reason: "empty_reply" });
         addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
         return;
       }
@@ -222,6 +279,7 @@
       history.push({ role: "assistant", content: full.trim() });
     } catch (err) {
       hideTyping();
+      track("chat_error", { reason: "network" });
       addMessage("error", "Couldn't reach the server — mind trying again, or just reach out directly?");
     } finally {
       setSending(false);
@@ -237,14 +295,14 @@
   chatForm.addEventListener("submit", function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
-    send(chatInput.value);
+    send(chatInput.value, "panel_form");
   }, true);
 
   if (askForm) {
     askForm.addEventListener("submit", function (e) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      send(askInput && askInput.value);
+      send(askInput && askInput.value, "hero_form");
     }, true);
   }
 
@@ -253,8 +311,19 @@
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      send(btn.getAttribute("data-ask"));
+      // The chip label is our own static copy, not visitor input, so it is
+      // safe to pass to GA4 — it is the useful part of this event.
+      track("chat_chip_click", { chip_text: btn.getAttribute("data-ask") || "" });
+      send(btn.getAttribute("data-ask"), "chip");
     }, true);
   });
+
+  // Panel opens vs. conversations actually started. Deliberately does NOT
+  // stop propagation — the design's own toggle handler must still run.
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      if (panel.hidden) track("chat_open", {});
+    }, true);
+  }
 })();
 </script>
