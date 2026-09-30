@@ -20,6 +20,12 @@
   // Set a Calendly URL only if you want the chat's "Book a call" to bypass
   // the on-page booking popup.
   var BOOKING_URL = null;
+  // Render the conversation inline in the hero instead of the cramped
+  // floating panel (210x422). Set false to fall back to the panel.
+  var INLINE_HERO = true;
+  // Once a conversation starts, step the hero's headline/sub-head/chips
+  // aside so the transcript gets the full column. Set false to keep them.
+  var IMMERSIVE = true;
   /* ------------------------------------------------------------------- */
 
   var d = document;
@@ -37,27 +43,46 @@
 
   // If the design ever drops these hooks, do nothing rather than throw —
   // the mock keeps working and the page is unaffected.
-  if (!panel || !seed || !chatForm || !chatInput) return;
+  if (!panel || !seed) return;
+  if (INLINE_HERO && (!askForm || !askInput)) return;
+  if (!INLINE_HERO && (!chatForm || !chatInput)) return;
 
-  var body = seed.parentElement;
   var history = [];
   var conversationId = null;
   var sending = false;
 
-  /* ---- Replace the two mock paragraphs with a real transcript -------- */
+  /* ---- Where the transcript lives ------------------------------------ *
+   * Inline mode puts it directly above the hero's ask form, so the form
+   * reads as the composer beneath the conversation — the layout of an
+   * actual chat window rather than a 210px sidebar.
+   *
+   * heroCol is reached by walking UP from the form, never by class name:
+   * the design's generated classes (rl19, rl1f, ...) change on every
+   * export and must never be used as selectors.                          */
+
+  var heroCol = INLINE_HERO ? askForm.parentElement : null;
+  var messagesEl = d.createElement("div");
+  messagesEl.className = INLINE_HERO ? "rlc-messages rlc-inline" : "rlc-messages";
+  messagesEl.setAttribute("aria-live", "polite");
+  messagesEl.hidden = true;
 
   seed.hidden = true;
   if (reply) reply.hidden = true;
 
-  var messagesEl = d.createElement("div");
-  messagesEl.className = "rlc-messages";
-  messagesEl.setAttribute("aria-live", "polite");
-  body.insertBefore(messagesEl, (reply || seed).nextSibling);
+  if (INLINE_HERO) {
+    heroCol.insertBefore(messagesEl, askForm);
+    // The floating panel is not used at all in this mode.
+    panel.hidden = true;
+    if (toggle) toggle.setAttribute("hidden", "hidden");
+  } else {
+    seed.parentElement.insertBefore(messagesEl, (reply || seed).nextSibling);
+  }
 
   var style = d.createElement("style");
   style.textContent =
     "[data-chat-seed],[data-chat-reply]{display:none!important}" +
-    ".rlc-messages{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;margin:10px 0 0;scrollbar-width:thin}" +
+    ".rlc-messages{display:flex;flex-direction:column;gap:10px;overflow-y:auto;scrollbar-width:thin}" +
+    ".rlc-messages:not(.rlc-inline){max-height:46vh;margin:10px 0 0}" +
     ".rlc-msg{font:inherit;line-height:1.5;border-radius:12px;padding:9px 12px;max-width:92%;word-wrap:break-word}" +
     ".rlc-user{align-self:flex-end;background:rgba(94,234,212,.14);color:#D7F7F0}" +
     ".rlc-bot{align-self:flex-start;background:rgba(255,255,255,.05);color:#E6EAF2}" +
@@ -70,7 +95,27 @@
     ".rlc-typing span{width:6px;height:6px;border-radius:50%;background:#5EEAD4;opacity:.45;animation:rlc-blink 1.2s infinite}" +
     ".rlc-typing span:nth-child(2){animation-delay:.2s}.rlc-typing span:nth-child(3){animation-delay:.4s}" +
     "@keyframes rlc-blink{0%,80%,100%{opacity:.25}40%{opacity:1}}" +
-    "@media (prefers-reduced-motion:reduce){.rlc-typing span{animation:none}}";
+    "@media (prefers-reduced-motion:reduce){.rlc-typing span{animation:none}}" +
+
+    /* ---- inline hero conversation ---- */
+    ".rlc-inline{width:100%;max-width:720px;margin:0 auto 18px;text-align:left;" +
+      "max-height:min(56vh,540px);padding:18px;box-sizing:border-box;" +
+      "border:1px solid rgba(94,234,212,.18);border-radius:16px;" +
+      "background:rgba(9,12,19,.55);backdrop-filter:blur(6px)}" +
+    ".rlc-inline .rlc-msg{max-width:88%}" +
+    /* Once a conversation is running, every other child of the hero column
+       steps aside so the transcript owns the space. Structural, not
+       class-based, so a fresh design export cannot break it. */
+    "[data-rl-chat-active] > *:not(.rlc-inline):not([data-ask-form]){" +
+      "display:none!important}" +
+    /* The design layers an animated fake placeholder ([data-typed] cycling
+       through phrases, plus a blinking [data-caret]) over the real input.
+       Once the visitor is actually in a conversation it competes with what
+       they are typing, so it goes away. Anchored on data-* attributes, not
+       the generated rl1j/rl1k class names. */
+    "[data-rl-chat-active] [data-hint]{display:none!important}" +
+    "@media (max-width:767px){.rlc-inline{max-height:62vh;padding:14px;border-radius:14px}" +
+      ".rlc-inline .rlc-msg{max-width:96%}}";
   d.head.appendChild(style);
 
   if (BOOKING_URL) {
@@ -168,15 +213,28 @@
   }
   function hideTyping() { var t = d.getElementById("rlcTyping"); if (t) t.remove(); }
 
-  function openPanel() {
-    panel.hidden = false;
-    if (toggle) toggle.setAttribute("aria-expanded", "true");
+  var activated = false;
+  function activate() {
+    if (messagesEl.hidden) messagesEl.hidden = false;
+    if (!INLINE_HERO) {
+      panel.hidden = false;
+      if (toggle) toggle.setAttribute("aria-expanded", "true");
+      return;
+    }
+    if (IMMERSIVE && !activated) {
+      activated = true;
+      heroCol.setAttribute("data-rl-chat-active", "1");
+      // Replaces the animated hint the CSS above just hid.
+      if (askInput && !askInput.placeholder) askInput.placeholder = "Ask a follow-up\u2026";
+    }
   }
 
   function setSending(on) {
     sending = on;
-    chatInput.disabled = on;
-    var btn = chatForm.querySelector('button[type="submit"]');
+    var form = INLINE_HERO ? askForm : chatForm;
+    var input = INLINE_HERO ? askInput : chatInput;
+    if (input) input.disabled = on;
+    var btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = on;
   }
 
@@ -186,9 +244,9 @@
     text = (text || "").trim();
     if (!text || sending) return;
 
-    openPanel();
+    activate();
     addMessage("user", text);
-    chatInput.value = "";
+    if (chatInput) chatInput.value = "";
     if (askInput) askInput.value = "";
     setSending(true);
     showTyping();
@@ -292,10 +350,10 @@
    * stopImmediatePropagation() means we read the value before that reset
    * runs, and the canned reply never fires.                               */
 
-  chatForm.addEventListener("submit", function (e) {
+  if (chatForm) chatForm.addEventListener("submit", function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
-    send(chatInput.value, "panel_form");
+    send(chatInput && chatInput.value, "panel_form");
   }, true);
 
   if (askForm) {
