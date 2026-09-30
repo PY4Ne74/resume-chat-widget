@@ -54,15 +54,16 @@ function isJobPostingUrl(url) {
 
 const SECURITY_DISCLAIMER = "For security reasons, I'm not authorized to visit external links.";
 
-// #form is a placeholder anchor — the contact form on the actual page this
-// widget gets embedded in must have id="form" for this link to jump there.
+// #contact is the real anchor on robert-lamb.com (verified live 2026-09-30 —
+// the page has id="contact" and does NOT have id="form", which the earlier
+// placeholder pointed at, making these two links dead ends).
 function businessUrlScriptedReply() {
-  return `${SECURITY_DISCLAIMER} This looks like it might be the homepage for your business or a landing page — I'd be happy to take a look at this personally and give you some feedback. If you'd like that, [fill out the form](#form) and send me the details, and I'll review it.`;
+  return `${SECURITY_DISCLAIMER} This looks like it might be the homepage for your business or a landing page — I'd be happy to take a look at this personally and give you some feedback. If you'd like that, [fill out the form](#contact) and send me the details, and I'll review it.`;
 }
 
-// #form is the same placeholder anchor as businessUrlScriptedReply above.
+// #contact is the same real anchor as businessUrlScriptedReply above.
 function conversationLimitReply() {
-  return `Thank you for using my AI. Based on the nature of this conversation, it will be worthwhile to book a call. [Click here](#form) to continue this conversation with me in a meeting.`;
+  return `Thank you for using my AI. Based on the nature of this conversation, it will be worthwhile to book a call. [Click here](#contact) to continue this conversation with me in a meeting.`;
 }
 
 function buildSystemPrompt(turnNumber, hasJobPostingUrl) {

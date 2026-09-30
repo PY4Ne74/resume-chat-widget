@@ -1,0 +1,260 @@
+<script>
+/* RL · Chat — wires the robert-lamb.com design's mock chat to the live API.
+ *
+ * Install: Elementor → Custom Code → new snippet named "RL · Chat",
+ *          Location "</body> - End", Priority 11, Condition: Entire Site.
+ *          Priority 11 matters — it must load AFTER "RL · Script" (10).
+ *
+ * This file deliberately touches NO page markup and NO generated CSS class
+ * names. It anchors only on data-* attributes and #rl-ask-input, which the
+ * design package documents as stable. That is what lets it survive a fresh
+ * export of home-page.json / site-body.html from Claude Design: re-importing
+ * the design wipes those two files, but never touches this snippet.
+ */
+(function () {
+  "use strict";
+
+  /* ---- CONFIG ------------------------------------------------------- */
+  var API_URL = "https://resume-chat-widget.vercel.app/api/chat";
+  // Leave null to keep the design's own CTA links (/#contact, /#portfolio).
+  // Set a Calendly URL only if you want the chat's "Book a call" to bypass
+  // the on-page booking popup.
+  var BOOKING_URL = null;
+  /* ------------------------------------------------------------------- */
+
+  var d = document;
+  if (d.documentElement.hasAttribute("data-rl-chat-live")) return; // no double-init
+  d.documentElement.setAttribute("data-rl-chat-live", "1");
+
+  var panel = d.querySelector("[data-chat]");
+  var seed = d.querySelector("[data-chat-seed]");
+  var reply = d.querySelector("[data-chat-reply]");
+  var toggle = d.querySelector("[data-chat-toggle]");
+  var chatForm = panel && panel.querySelector("form");
+  var chatInput = d.getElementById("rl-chat-input");
+  var askForm = d.querySelector("[data-ask-form]");
+  var askInput = d.getElementById("rl-ask-input");
+
+  // If the design ever drops these hooks, do nothing rather than throw —
+  // the mock keeps working and the page is unaffected.
+  if (!panel || !seed || !chatForm || !chatInput) return;
+
+  var body = seed.parentElement;
+  var history = [];
+  var conversationId = null;
+  var sending = false;
+
+  /* ---- Replace the two mock paragraphs with a real transcript -------- */
+
+  seed.hidden = true;
+  if (reply) reply.hidden = true;
+
+  var messagesEl = d.createElement("div");
+  messagesEl.className = "rlc-messages";
+  messagesEl.setAttribute("aria-live", "polite");
+  body.insertBefore(messagesEl, (reply || seed).nextSibling);
+
+  var style = d.createElement("style");
+  style.textContent =
+    "[data-chat-seed],[data-chat-reply]{display:none!important}" +
+    ".rlc-messages{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;margin:10px 0 0;scrollbar-width:thin}" +
+    ".rlc-msg{font:inherit;line-height:1.5;border-radius:12px;padding:9px 12px;max-width:92%;word-wrap:break-word}" +
+    ".rlc-user{align-self:flex-end;background:rgba(94,234,212,.14);color:#D7F7F0}" +
+    ".rlc-bot{align-self:flex-start;background:rgba(255,255,255,.05);color:#E6EAF2}" +
+    ".rlc-err{align-self:flex-start;background:rgba(255,120,120,.12);color:#FFC9C9}" +
+    ".rlc-msg p{margin:0 0 .5em}.rlc-msg p:last-child{margin-bottom:0}" +
+    ".rlc-msg ul{margin:.25em 0 .5em;padding-left:1.1em}.rlc-msg li{margin:.2em 0}" +
+    ".rlc-msg strong{color:#5EEAD4;font-weight:700}" +
+    ".rlc-msg a{color:#5EEAD4;text-decoration:underline}" +
+    ".rlc-typing{align-self:flex-start;display:flex;gap:4px;padding:10px 12px}" +
+    ".rlc-typing span{width:6px;height:6px;border-radius:50%;background:#5EEAD4;opacity:.45;animation:rlc-blink 1.2s infinite}" +
+    ".rlc-typing span:nth-child(2){animation-delay:.2s}.rlc-typing span:nth-child(3){animation-delay:.4s}" +
+    "@keyframes rlc-blink{0%,80%,100%{opacity:.25}40%{opacity:1}}" +
+    "@media (prefers-reduced-motion:reduce){.rlc-typing span{animation:none}}";
+  d.head.appendChild(style);
+
+  if (BOOKING_URL) {
+    var bookLink = panel.querySelector('a[href*="#contact"]');
+    if (bookLink) { bookLink.href = BOOKING_URL; bookLink.target = "_blank"; bookLink.rel = "noopener"; }
+  }
+
+  /* ---- Rendering (ported from the tested widget) --------------------- *
+   * Everything is built with createElement/textContent. Model and visitor
+   * text never touches innerHTML, so there is no injection path.          */
+
+  function appendInline(parent, text) {
+    var parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
+    parts.forEach(function (part) {
+      if (!part) return;
+      var link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (part.indexOf("**") === 0 && part.lastIndexOf("**") === part.length - 2 && part.length > 4) {
+        var b = d.createElement("strong");
+        b.textContent = part.slice(2, -2);
+        parent.appendChild(b);
+      } else if (link && /^(https?:\/\/|#|\/)/i.test(link[2])) {
+        var a = d.createElement("a");
+        a.href = link[2];
+        a.textContent = link[1];
+        if (/^https?:/i.test(link[2])) { a.target = "_blank"; a.rel = "noopener"; }
+        parent.appendChild(a);
+      } else {
+        parent.appendChild(d.createTextNode(part));
+      }
+    });
+  }
+
+  function renderFormatted(container, text) {
+    var list = null;
+    text.split("\n").forEach(function (line) {
+      var t = line.trim();
+      if (t.indexOf("- ") === 0) {
+        if (!list) { list = d.createElement("ul"); container.appendChild(list); }
+        var li = d.createElement("li");
+        appendInline(li, t.slice(2));
+        list.appendChild(li);
+      } else if (t) {
+        list = null;
+        var p = d.createElement("p");
+        appendInline(p, t);
+        container.appendChild(p);
+      }
+    });
+  }
+
+  function addMessage(kind, text) {
+    var el = d.createElement("div");
+    el.className = "rlc-msg " + (kind === "user" ? "rlc-user" : kind === "error" ? "rlc-err" : "rlc-bot");
+    if (kind === "bot") renderFormatted(el, text); else el.textContent = text;
+    messagesEl.appendChild(el);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return el;
+  }
+
+  function showTyping() {
+    var t = d.createElement("div");
+    t.className = "rlc-typing";
+    t.id = "rlcTyping";
+    t.innerHTML = "<span></span><span></span><span></span>"; // static markup only
+    messagesEl.appendChild(t);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function hideTyping() { var t = d.getElementById("rlcTyping"); if (t) t.remove(); }
+
+  function openPanel() {
+    panel.hidden = false;
+    if (toggle) toggle.setAttribute("aria-expanded", "true");
+  }
+
+  function setSending(on) {
+    sending = on;
+    chatInput.disabled = on;
+    var btn = chatForm.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = on;
+  }
+
+  /* ---- The actual call ----------------------------------------------- */
+
+  async function send(text) {
+    text = (text || "").trim();
+    if (!text || sending) return;
+
+    openPanel();
+    addMessage("user", text);
+    chatInput.value = "";
+    if (askInput) askInput.value = "";
+    setSending(true);
+    showTyping();
+
+    try {
+      var res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history: history, conversationId: conversationId })
+      });
+
+      var cid = res.headers.get("X-Conversation-Id");
+      if (cid) conversationId = cid;
+
+      // Errors come back as JSON; a good reply is a raw text stream.
+      var ct = res.headers.get("Content-Type") || "";
+      if (!res.ok || ct.indexOf("application/json") !== -1) {
+        hideTyping();
+        addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
+        return;
+      }
+
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var full = "";
+      var streamEl = null;
+      var rawEl = null;
+
+      while (true) {
+        var chunk = await reader.read();
+        if (chunk.done) break;
+        var piece = decoder.decode(chunk.value, { stream: true });
+        if (!piece) continue;
+        if (!streamEl) {
+          hideTyping();
+          streamEl = d.createElement("div");
+          streamEl.className = "rlc-msg rlc-bot";
+          rawEl = d.createElement("span");
+          streamEl.appendChild(rawEl);
+          messagesEl.appendChild(streamEl);
+        }
+        full += piece;
+        rawEl.textContent = full; // live typewriter, plain text while streaming
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      if (!streamEl || !full.trim()) {
+        hideTyping();
+        addMessage("error", "Something went wrong on my end — mind trying again, or just reach out directly?");
+        return;
+      }
+
+      // Re-render once complete so bullets and bold become real elements.
+      streamEl.textContent = "";
+      renderFormatted(streamEl, full.trim());
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      history.push({ role: "user", content: text });
+      history.push({ role: "assistant", content: full.trim() });
+    } catch (err) {
+      hideTyping();
+      addMessage("error", "Couldn't reach the server — mind trying again, or just reach out directly?");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  /* ---- Take over the mock's handlers ---------------------------------- *
+   * RL · Script already bound submit handlers that call preventDefault()
+   * and e.target.reset(). Listening in the CAPTURE phase and calling
+   * stopImmediatePropagation() means we read the value before that reset
+   * runs, and the canned reply never fires.                               */
+
+  chatForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    send(chatInput.value);
+  }, true);
+
+  if (askForm) {
+    askForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      send(askInput && askInput.value);
+    }, true);
+  }
+
+  // Hero suggestion chips ("Audit my funnel", "Show me the numbers", …)
+  d.querySelectorAll("[data-ask]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      send(btn.getAttribute("data-ask"));
+    }, true);
+  });
+})();
+</script>
