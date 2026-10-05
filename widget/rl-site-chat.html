@@ -141,7 +141,7 @@
     "[data-rl-chat-active] [data-hint]{display:none!important}" +
     /* #5EEAD4 is the same teal token the rest of the page uses (and that the
        transcript already uses for bold labels and links), not a new colour. */
-    ".rlc-tagline{display:block;width:100%;margin:6px 0 0;font-size:11px;line-height:1.35;font-weight:400;letter-spacing:.01em;text-transform:none;color:#5EEAD4;opacity:.85}" +
+    ".rlc-tagline{flex-basis:100%;width:100%;display:block;margin:2px 0 0;font-size:11px;line-height:1.35;font-weight:400;letter-spacing:.01em;text-transform:none;color:#5EEAD4;opacity:.85}" +
     "@media (max-width:767px){.rlc-inline{padding:14px;border-radius:14px}" +
       ".rlc-inline .rlc-msg{max-width:96%}}";
   d.head.appendChild(style);
@@ -408,11 +408,14 @@
       var tag = d.createElement("span");
       tag.className = "rlc-tagline";
       tag.textContent = TAGLINE;
-      // Inserted AFTER the label/buttons row, not inside the label. Putting it
-      // inside widened the label enough to wrap the send button onto its own
-      // line; as a sibling it gets a full line of its own and the row above is
-      // left exactly as the design laid it out.
-      labelRow.parentNode.insertBefore(tag, labelRow.nextSibling);
+      /* Appended INSIDE the label/buttons row, which already carries
+       * flex-wrap:wrap and a 16px horizontal padding. A 100% flex-basis gives
+       * the tagline a line of its own below the row's first line, and because
+       * it is inside the row it lines up under the label instead of against
+       * the panel's left border. (Inside the label SPAN it would instead
+       * widen the label and wrap the send button; as a sibling AFTER the row
+       * it escapes that padding entirely - both were tried.) */
+      labelRow.appendChild(tag);
     }
   }
 
