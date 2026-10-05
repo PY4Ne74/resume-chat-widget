@@ -28,8 +28,11 @@
   var IMMERSIVE = true;
   // Sub-line under the "Ask Robert's AI" label. Set to "" to show nothing.
   var TAGLINE = "Trained on my career, philosophy and approach \u2014 not a script";
+  // Hide the hero suggestion chips entirely. Set true to show them, in which
+  // case CHIPS below supplies their copy.
+  var SHOW_CHIPS = false;
   // The 3 hero suggestion chips: [button label, what it actually sends].
-  // Set to null to keep whatever the design ships.
+  // Only used when SHOW_CHIPS is true. Set to null to keep the design's own.
   var CHIPS = [
     ["Why hire you?",        "I'm hiring a VP of Marketing \u2014 why should I shortlist you?"],
     ["First 90 days",        "What would your first 90 days look like leading our marketing?"],
@@ -136,7 +139,9 @@
        they are typing, so it goes away. Anchored on data-* attributes, not
        the generated rl1j/rl1k class names. */
     "[data-rl-chat-active] [data-hint]{display:none!important}" +
-    ".rlc-tagline{display:block;width:100%;margin:6px 0 0;font-size:11px;line-height:1.35;font-weight:400;letter-spacing:.01em;text-transform:none;opacity:.62}" +
+    /* #5EEAD4 is the same teal token the rest of the page uses (and that the
+       transcript already uses for bold labels and links), not a new colour. */
+    ".rlc-tagline{display:block;width:100%;margin:6px 0 0;font-size:11px;line-height:1.35;font-weight:400;letter-spacing:.01em;text-transform:none;color:#5EEAD4;opacity:.85}" +
     "@media (max-width:767px){.rlc-inline{padding:14px;border-radius:14px}" +
       ".rlc-inline .rlc-msg{max-width:96%}}";
   d.head.appendChild(style);
@@ -467,7 +472,15 @@
     }
   }
 
-  if (CHIPS && CHIPS.length) {
+  var firstChip = d.querySelector("[data-ask]");
+  var chipRow = firstChip && firstChip.parentElement;
+  if (!SHOW_CHIPS) {
+    // Hide the whole row rather than each button, so the row's own spacing
+    // goes with it and the hero does not keep an empty gap. Reached by
+    // walking up from [data-ask]; the row has no stable attribute of its own
+    // and its generated class name changes on every design export.
+    if (chipRow) chipRow.style.display = "none";
+  } else if (CHIPS && CHIPS.length) {
     d.querySelectorAll("[data-ask]").forEach(function (btn, i) {
       if (!CHIPS[i]) return;
       btn.textContent = CHIPS[i][0];
@@ -495,8 +508,8 @@
     }, true);
   }
 
-  // Hero suggestion chips ("Audit my funnel", "Show me the numbers", …)
-  d.querySelectorAll("[data-ask]").forEach(function (btn) {
+  // Hero suggestion chips — only wired when they are actually shown.
+  if (SHOW_CHIPS) d.querySelectorAll("[data-ask]").forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopImmediatePropagation();
