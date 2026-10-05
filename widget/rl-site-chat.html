@@ -26,6 +26,24 @@
   // Once a conversation starts, step the hero's headline/sub-head/chips
   // aside so the transcript gets the full column. Set false to keep them.
   var IMMERSIVE = true;
+  // Sub-line under the "Ask Robert's AI" label. Set to "" to show nothing.
+  var TAGLINE = "Trained on my career, philosophy and approach \u2014 not a script";
+  // The 3 hero suggestion chips: [button label, what it actually sends].
+  // Set to null to keep whatever the design ships.
+  var CHIPS = [
+    ["Why hire you?",        "I'm hiring a VP of Marketing \u2014 why should I shortlist you?"],
+    ["First 90 days",        "What would your first 90 days look like leading our marketing?"],
+    ["Where our funnel leaks", "Our funnel is leaking qualified leads \u2014 where would you look first?"]
+  ];
+  // The animated placeholder phrases cycling in the empty input.
+  // Set to null to keep the design's own list.
+  var TYPED_PHRASES = [
+    "Why should I shortlist you for a VP Marketing role\u2026",
+    "What would your first 90 days look like\u2026",
+    "Walk me through a funnel you actually fixed\u2026",
+    "How do you produce agency-quality work without an agency\u2026",
+    "Our pipeline stalls after the demo request \u2014 where do you look\u2026"
+  ];
   /* ------------------------------------------------------------------- */
 
   var d = document;
@@ -81,8 +99,12 @@
   var style = d.createElement("style");
   style.textContent =
     "[data-chat-seed],[data-chat-reply]{display:none!important}" +
-    ".rlc-messages{display:flex;flex-direction:column;gap:10px;overflow-y:auto;scrollbar-width:thin}" +
-    ".rlc-messages:not(.rlc-inline){max-height:46vh;margin:10px 0 0}" +
+    ".rlc-messages{display:flex;flex-direction:column;gap:10px}" +
+    /* Only the floating-panel mode scrolls internally. The inline hero
+       transcript deliberately has NO inner scrollbar - it grows with the
+       page and the page itself scrolls, so it never reads as an iframe
+       embedded in the hero. */
+    ".rlc-messages:not(.rlc-inline){max-height:46vh;margin:10px 0 0;overflow-y:auto;scrollbar-width:thin}" +
     ".rlc-msg{font:inherit;line-height:1.5;border-radius:12px;padding:9px 12px;max-width:92%;word-wrap:break-word}" +
     ".rlc-user{align-self:flex-end;background:rgba(94,234,212,.14);color:#D7F7F0}" +
     ".rlc-bot{align-self:flex-start;background:rgba(255,255,255,.05);color:#E6EAF2}" +
@@ -99,7 +121,7 @@
 
     /* ---- inline hero conversation ---- */
     ".rlc-inline{width:100%;max-width:720px;margin:0 auto 18px;text-align:left;" +
-      "max-height:min(56vh,540px);padding:18px;box-sizing:border-box;" +
+      "padding:18px;box-sizing:border-box;" +
       "border:1px solid rgba(94,234,212,.18);border-radius:16px;" +
       "background:rgba(9,12,19,.55);backdrop-filter:blur(6px)}" +
     ".rlc-inline .rlc-msg{max-width:88%}" +
@@ -114,7 +136,8 @@
        they are typing, so it goes away. Anchored on data-* attributes, not
        the generated rl1j/rl1k class names. */
     "[data-rl-chat-active] [data-hint]{display:none!important}" +
-    "@media (max-width:767px){.rlc-inline{max-height:62vh;padding:14px;border-radius:14px}" +
+    ".rlc-tagline{display:block;width:100%;margin:6px 0 0;font-size:11px;line-height:1.35;font-weight:400;letter-spacing:.01em;text-transform:none;opacity:.62}" +
+    "@media (max-width:767px){.rlc-inline{padding:14px;border-radius:14px}" +
       ".rlc-inline .rlc-msg{max-width:96%}}";
   d.head.appendChild(style);
 
@@ -194,12 +217,31 @@
     });
   }
 
+  /* With the inline transcript flowing in the page there is no inner
+   * scrollbar to nudge, so the PAGE is what has to move. Keep the composer
+   * in view: it sits directly under the transcript, so pinning it near the
+   * bottom of the viewport keeps both the newest text and the input visible.
+   * Throttled, and instant (not smooth) while streaming - calling a smooth
+   * scroll on every token yanks the page out from under whoever is reading. */
+  var lastFollow = 0;
+  function keepInView(smooth) {
+    if (!INLINE_HERO) { messagesEl.scrollTop = messagesEl.scrollHeight; return; }
+    var now = Date.now();
+    if (!smooth && now - lastFollow < 120) return;
+    lastFollow = now;
+    var r = askForm.getBoundingClientRect();
+    if (r.bottom > window.innerHeight || r.top < 0) {
+      try { askForm.scrollIntoView({ block: "end", behavior: smooth ? "smooth" : "auto" }); }
+      catch (e) { askForm.scrollIntoView(false); }
+    }
+  }
+
   function addMessage(kind, text) {
     var el = d.createElement("div");
     el.className = "rlc-msg " + (kind === "user" ? "rlc-user" : kind === "error" ? "rlc-err" : "rlc-bot");
     if (kind === "bot") renderFormatted(el, text); else el.textContent = text;
     messagesEl.appendChild(el);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    keepInView(true);
     return el;
   }
 
@@ -209,7 +251,7 @@
     t.id = "rlcTyping";
     t.innerHTML = "<span></span><span></span><span></span>"; // static markup only
     messagesEl.appendChild(t);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    keepInView(true);
   }
   function hideTyping() { var t = d.getElementById("rlcTyping"); if (t) t.remove(); }
 
@@ -318,7 +360,7 @@
         }
         full += piece;
         rawEl.textContent = full; // live typewriter, plain text while streaming
-        messagesEl.scrollTop = messagesEl.scrollHeight;
+        keepInView(false);
       }
 
       if (!streamEl || !full.trim()) {
@@ -331,7 +373,7 @@
       // Re-render once complete so bullets and bold become real elements.
       streamEl.textContent = "";
       renderFormatted(streamEl, full.trim());
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+      keepInView(true);
 
       history.push({ role: "user", content: text });
       history.push({ role: "assistant", content: full.trim() });
@@ -342,6 +384,95 @@
     } finally {
       setSending(false);
     }
+  }
+
+  /* ---- Copy overrides -------------------------------------------------- *
+   * Chip labels, what they send, the animated placeholder phrases and the
+   * tagline all live HERE rather than in the design package, because a fresh
+   * export of home-page.json overwrites the markup and would silently revert
+   * them. Anchored on data-* hooks only, never generated class names.        */
+
+  if (TAGLINE) {
+    // The row holding the "Ask Robert's AI" label and the Try it / send
+    // buttons is reached via [data-ask-shuffle], a stable hook; the label is
+    // its first child. Nothing here depends on a generated class name.
+    var shuffleBtn = askForm && askForm.querySelector("[data-ask-shuffle]");
+    var labelRow = shuffleBtn && shuffleBtn.parentElement;
+    var labelEl = labelRow && labelRow.firstElementChild;
+    if (labelRow && !askForm.querySelector(".rlc-tagline")) {
+      var tag = d.createElement("span");
+      tag.className = "rlc-tagline";
+      tag.textContent = TAGLINE;
+      // Inserted AFTER the label/buttons row, not inside the label. Putting it
+      // inside widened the label enough to wrap the send button onto its own
+      // line; as a sibling it gets a full line of its own and the row above is
+      // left exactly as the design laid it out.
+      labelRow.parentNode.insertBefore(tag, labelRow.nextSibling);
+    }
+  }
+
+  if (TYPED_PHRASES && TYPED_PHRASES.length) {
+    var typedEl = d.querySelector("[data-typed]");
+    if (typedEl) {
+      /* RL · Script parses data-phrases into a local array ONCE at init, and
+       * it runs before this file, so rewriting the attribute here changes
+       * nothing - it is already holding the old list in a closure. Swap the
+       * node instead: the design's typewriter carries on animating a node
+       * that is no longer in the document (harmless and invisible) while our
+       * clone, with our phrases, takes its place on screen. Only [data-typed]
+       * is replaced, so the design's own show/hide of the [data-hint] wrapper
+       * keeps working untouched. */
+      var ours = typedEl.cloneNode(false);
+      ours.setAttribute("data-phrases", JSON.stringify(TYPED_PHRASES));
+      typedEl.parentNode.replaceChild(ours, typedEl);
+
+      var reduceMotion = window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) {
+        ours.textContent = TYPED_PHRASES[0];
+      } else {
+        // Same cadence as the design's own typewriter so it reads identically.
+        var pi = 0, ci = 0, erasing = false;
+        (function tick() {
+          var phrase = TYPED_PHRASES[pi], wait;
+          if (!erasing) {
+            ci++;
+            if (ci >= phrase.length) { erasing = true; wait = 2400; }
+            else wait = 42 + Math.random() * 38;
+          } else {
+            ci -= 3;
+            if (ci <= 0) { ci = 0; erasing = false; pi = (pi + 1) % TYPED_PHRASES.length; wait = 420; }
+            else wait = 18;
+          }
+          ours.textContent = phrase.slice(0, Math.max(0, ci));
+          setTimeout(tick, wait);
+        })();
+      }
+
+      // "Try it" fills the input from that same stale array, so take it over
+      // the same way the forms are taken over: capture phase, then stop the
+      // design's own handler from running.
+      var shuffle = d.querySelector("[data-ask-shuffle]");
+      if (shuffle && askInput) {
+        var shuffleIdx = -1;
+        shuffle.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          shuffleIdx = (shuffleIdx + 1) % TYPED_PHRASES.length;
+          askInput.value = TYPED_PHRASES[shuffleIdx].replace(/\u2026$/, "");
+          askInput.dispatchEvent(new Event("input", { bubbles: true }));
+          askInput.focus();
+        }, true);
+      }
+    }
+  }
+
+  if (CHIPS && CHIPS.length) {
+    d.querySelectorAll("[data-ask]").forEach(function (btn, i) {
+      if (!CHIPS[i]) return;
+      btn.textContent = CHIPS[i][0];
+      btn.setAttribute("data-ask", CHIPS[i][1]);
+    });
   }
 
   /* ---- Take over the mock's handlers ---------------------------------- *
