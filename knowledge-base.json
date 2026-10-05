@@ -10,201 +10,431 @@
       "id": "intellithreat-ai-production-pipeline",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech", "startup"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech",
+        "startup"
+      ],
       "challenge": "A 3-month-old cybersecurity company needed a full rebrand and an ongoing stream of website, video, and sales collateral production, but traditional agency/dev costs and turnaround times were too slow and expensive for a startup.",
       "action": "Led the full rebrand from Blueshift Cybersecurity to IntelliThreat and brought website/video/collateral production in-house, building an AI-accelerated production pipeline using Claude, Higgsfield, Elementor/WordPress, and Remotion. Range extends beyond AI prompting alone — e.g. the homepage's radar/scanner animations were built as code-rendered assets (Python/Pillow/ffmpeg), not AI-generated, when that was the better tool for the job.",
       "result": "Saved $200K+ in production costs and dramatically accelerated turnaround time versus outsourcing to agencies or traditional dev teams.",
-      "relevant_for": ["rebrand", "website costs", "marketing production speed", "AI production", "budget-constrained marketing", "startup marketing", "doing more with a lean team"]
+      "relevant_for": [
+        "rebrand",
+        "website costs",
+        "marketing production speed",
+        "AI production",
+        "budget-constrained marketing",
+        "startup marketing",
+        "doing more with a lean team"
+      ]
     },
     {
       "id": "intellithreat-video-ad-production",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech"
+      ],
       "challenge": "Needed broadcast-quality YouTube ad campaigns (M365, Google Workspace attack-story ads) without hiring a video production agency or dedicated editor.",
       "action": "Personally directed and iterated video ad production end-to-end using Remotion (programmatic, code-driven video) — testing voiceover options, music, pacing, and length across 40+ iterations per campaign to land on the strongest cut.",
       "result": "Produced multiple finished 4K YouTube ad campaigns (M365, Google Workspace) entirely in-house, with the iteration rigor of an agency edit process at a fraction of the cost and turnaround time.",
-      "relevant_for": ["video production", "video ads", "youtube advertising", "in-house video capability", "AI-accelerated production", "technical range beyond prompting"]
+      "relevant_for": [
+        "video production",
+        "video ads",
+        "youtube advertising",
+        "in-house video capability",
+        "AI-accelerated production",
+        "technical range beyond prompting"
+      ]
     },
     {
       "id": "intellithreat-linkedin-campaign",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech"
+      ],
       "challenge": "Needed a steady cadence of differentiated LinkedIn content translating technical security capabilities into buyer-relevant messaging, without a dedicated content or design team.",
       "action": "Built and executed an integrated LinkedIn content system — writing posts and designing matching custom graphics for each, covering distinct buyer-relevant themes (data residency, autonomous threat hunting, compliance readiness, deployment speed, plain-language alerts) using a locked, code-rendered graphic template for visual consistency.",
       "result": "Shipped 15+ LinkedIn posts with matching custom graphics across 10+ distinct campaign themes, produced systematically rather than one-off.",
-      "relevant_for": ["social media content", "linkedin marketing", "content production at scale", "organic social", "content-led growth"]
+      "relevant_for": [
+        "social media content",
+        "linkedin marketing",
+        "content production at scale",
+        "organic social",
+        "content-led growth"
+      ]
     },
     {
       "id": "intellithreat-seo-ai-search-audit",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech"
+      ],
       "challenge": "After a domain migration (Blueshift Cybersecurity to IntelliThreat), the site lost most of its search visibility with no clear diagnosis of why.",
       "action": "Ran a full technical SEO audit, root-causing the visibility loss to botched migration redirects (271 of 307 URLs dumping to the homepage instead of equivalent pages), and shipped fixes (titles, meta descriptions, schema) across 32 priority pages. Also ran a forward-looking AI-search readiness audit — evaluating and improving whether AI assistants like Perplexity and ChatGPT cite the site, not just whether Google ranks it.",
       "result": "Verified Perplexity already citing IntelliThreat by name for a real buyer query (\"best autonomous AI threat detection and response platform for M365 that keeps data in tenant\") as of September 2026. The core indexing fix from the migration issue is fully diagnosed with a clear remediation plan; that specific fix is in progress, not yet complete — flagged honestly rather than overstated.",
-      "relevant_for": ["seo", "technical seo", "ai seo", "aeo", "geo", "domain migration", "site audits", "search visibility recovery"]
+      "relevant_for": [
+        "seo",
+        "technical seo",
+        "ai seo",
+        "aeo",
+        "geo",
+        "domain migration",
+        "site audits",
+        "search visibility recovery"
+      ]
     },
     {
       "id": "ai-orchestrated-job-search-ops",
       "company": "Personal project — Robert's own job search",
       "role": "Builder / Operator",
-      "industry_tags": ["personal productivity", "marketing automation", "systems design"],
+      "industry_tags": [
+        "personal productivity",
+        "marketing automation",
+        "systems design"
+      ],
       "challenge": "Running an effective modern job search meant coordinating five disconnected tools — lead sourcing, LinkedIn outreach, cold email, CRM logging, personalized video — normally requiring constant manual dashboard-switching with no real visibility into what's actually working.",
       "action": "Architected and built an AI-orchestrated growth-ops stack — lead sourcing (Lemlist), automated email outreach (Smartlead), LinkedIn outreach, CRM logging (HubSpot), and personalized AI video outreach (SendSpark), all controlled through one conversational interface — then built \"JobbyFind,\" a live operations dashboard that pulls real data automatically every day (Google Analytics, Smartlead, Lemlist) and generates honest AI-driven daily insights, including uncomfortable ones, not just vanity metrics.",
       "result": "He applies his own tools to his own goals — exactly what he'd do for a client or employer. Full-stack tool orchestration, live measurement instead of guesswork, and the discipline to self-report honestly on what's working and what isn't.",
-      "relevant_for": ["ai orchestration", "marketing automation", "crm integration", "systems thinking", "personal productivity systems", "does he practice what he preaches", "technology mastery", "process design"]
+      "relevant_for": [
+        "ai orchestration",
+        "marketing automation",
+        "crm integration",
+        "systems thinking",
+        "personal productivity systems",
+        "does he practice what he preaches",
+        "technology mastery",
+        "process design"
+      ]
     },
     {
       "id": "intellithreat-lead-gen-conversion",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech", "startup"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech",
+        "startup"
+      ],
       "challenge": "Company had no formal marketing department or process at all — needed to build lead generation from zero and turn it into predictable revenue growth.",
       "action": "Built and ran inbound lead generation (paid campaigns + website) over 4 years, plus account-based demand generation targeting key accounts.",
       "result": "20% lead-to-customer conversion rate — 4-10x typical B2B SaaS/cybersecurity benchmarks — directly driving growth from 10 to 150 customers across 10 countries.",
-      "relevant_for": ["lead generation", "conversion rate", "demand generation", "pipeline growth", "scaling a customer base", "b2b saas growth", "cybersecurity marketing", "account-based marketing"]
+      "relevant_for": [
+        "lead generation",
+        "conversion rate",
+        "demand generation",
+        "pipeline growth",
+        "scaling a customer base",
+        "b2b saas growth",
+        "cybersecurity marketing",
+        "account-based marketing"
+      ]
     },
     {
       "id": "intellithreat-reseller-channel",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech", "channel"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech",
+        "channel"
+      ],
       "challenge": "Needed to scale go-to-market internationally without building out a large direct sales/marketing team in every region.",
       "action": "Recruited 50+ reseller partners across 10 countries and consulted directly with partners to build and optimize their external marketing campaigns.",
       "result": "Drove over 100 end-user accounts through the partner channel.",
-      "relevant_for": ["channel partners", "reseller programs", "international expansion", "indirect sales", "partner enablement", "global go-to-market"]
+      "relevant_for": [
+        "channel partners",
+        "reseller programs",
+        "international expansion",
+        "indirect sales",
+        "partner enablement",
+        "global go-to-market"
+      ]
     },
     {
       "id": "intellithreat-crm-implementation",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech"
+      ],
       "challenge": "No CRM, marketing automation, or web-tracking visibility existed, making it hard to connect marketing activity to pipeline and revenue.",
       "action": "Implemented Salesforce for CRM, marketing automation, and web-tracking visibility from the ground up.",
       "result": "Enabled data-driven marketing and product strategy across the company.",
-      "relevant_for": ["crm implementation", "salesforce", "marketing automation", "sales and marketing alignment", "attribution", "data visibility", "martech stack"]
+      "relevant_for": [
+        "crm implementation",
+        "salesforce",
+        "marketing automation",
+        "sales and marketing alignment",
+        "attribution",
+        "data visibility",
+        "martech stack"
+      ]
     },
     {
       "id": "intellithreat-linkedin-organic",
       "company": "IntelliThreat (formerly Blueshift Cybersecurity)",
       "role": "VP of Marketing / Director of Marketing",
-      "industry_tags": ["cybersecurity", "saas", "b2b tech"],
+      "industry_tags": [
+        "cybersecurity",
+        "saas",
+        "b2b tech"
+      ],
       "challenge": "Needed a durable, cost-efficient revenue channel that didn't depend entirely on paid ad spend.",
       "action": "Built and owned a LinkedIn organic program as a core demand channel.",
       "result": "50% of new revenue sourced from a single owned LinkedIn program.",
-      "relevant_for": ["organic social", "linkedin marketing", "low cost of acquisition", "b2b social strategy", "content-led growth"]
+      "relevant_for": [
+        "organic social",
+        "linkedin marketing",
+        "low cost of acquisition",
+        "b2b social strategy",
+        "content-led growth"
+      ]
     },
     {
       "id": "techark-agency-growth-sales",
       "company": "TechArk Solutions",
       "role": "Digital Marketing Agency Director",
-      "industry_tags": ["digital marketing agency", "professional services", "multi-client"],
+      "industry_tags": [
+        "digital marketing agency",
+        "professional services",
+        "multi-client"
+      ],
       "challenge": "Agency needed to grow its client base and close more new business while running 40+ concurrent client projects.",
       "action": "Owned strategy, deliverables, and client relationships across 40+ clients; partnered directly with sales to develop and pitch proposals, and personally prepared, presented, and closed sales proposals.",
       "result": "Grew the client list 67% in 8 months and personally closed 80% of proposals, up to $8,000+/month in value per new client.",
-      "relevant_for": ["agency growth", "sales enablement", "proposal writing and closing", "new business development", "multi-client account management", "team management"]
+      "relevant_for": [
+        "agency growth",
+        "sales enablement",
+        "proposal writing and closing",
+        "new business development",
+        "multi-client account management",
+        "team management"
+      ]
     },
     {
       "id": "techark-client-reporting",
       "company": "TechArk Solutions",
       "role": "Digital Marketing Agency Director",
-      "industry_tags": ["digital marketing agency", "professional services"],
+      "industry_tags": [
+        "digital marketing agency",
+        "professional services"
+      ],
       "challenge": "Clients lacked transparent, real-time visibility into campaign performance, creating friction and retention risk.",
       "action": "Implemented the Agency Analytics reporting platform with integrated third-party data across all client accounts.",
       "result": "Improved client satisfaction and reporting transparency across the agency's book of business.",
-      "relevant_for": ["client reporting", "retention", "transparency", "agency operations", "client relationship management"]
+      "relevant_for": [
+        "client reporting",
+        "retention",
+        "transparency",
+        "agency operations",
+        "client relationship management"
+      ]
     },
     {
       "id": "techark-video-social-engagement",
       "company": "TechArk Solutions",
       "role": "Digital Marketing Agency Director",
-      "industry_tags": ["digital marketing agency", "content production"],
+      "industry_tags": [
+        "digital marketing agency",
+        "content production"
+      ],
       "challenge": "Client social channels needed stronger engagement from video content.",
       "action": "Managed video development end-to-end — scripting, editor's notes, concept, and editing.",
       "result": "Drove an 80% increase in social media engagement.",
-      "relevant_for": ["video marketing", "social media engagement", "content production", "social strategy"]
+      "relevant_for": [
+        "video marketing",
+        "social media engagement",
+        "content production",
+        "social strategy"
+      ]
     },
     {
       "id": "accutrain-event-marketing",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "events", "training services", "b2c", "consumer"],
+      "industry_tags": [
+        "education",
+        "events",
+        "training services",
+        "b2c",
+        "consumer"
+      ],
       "challenge": "10 national education conferences needed stronger registration numbers and event revenue growth year over year — fundamentally a consumer sale: convincing an individual educator to personally decide to travel, pay, and attend, not a top-down institutional purchase.",
       "action": "Directed digital marketing strategy and execution for all 10 national education conferences, selling the in-person, multi-day experience entirely online — website, video, paid ads, testimonials, and email marketing.",
       "result": "Grew registrations nearly 80% over two years (2018-2019) and increased event revenue 42% in 2018 (+$358K) and 32% in 2019 (+$388K).",
-      "relevant_for": ["event marketing", "conference and registration growth", "education industry", "b2c marketing", "consumer sales", "revenue growth from events"]
+      "relevant_for": [
+        "event marketing",
+        "conference and registration growth",
+        "education industry",
+        "b2c marketing",
+        "consumer sales",
+        "revenue growth from events"
+      ]
     },
     {
       "id": "accutrain-paid-ads-roas",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "training services", "e-commerce", "b2b services"],
+      "industry_tags": [
+        "education",
+        "training services",
+        "e-commerce",
+        "b2b services"
+      ],
       "challenge": "Needed paid advertising across products and services to be demonstrably profitable, not just generate traffic.",
       "action": "Designed, implemented, and managed Facebook Ads, Google Ads, Display, and YouTube Pre-Roll campaigns across all products and services.",
       "result": "$337K in revenue on $52.5K in combined ad spend (2018-2019) — a 6.4x blended ROAS — with paid-campaign-driven traffic increases of 1,865% (2018), 156% (2019), and 57% (2020).",
-      "relevant_for": ["paid advertising", "roas", "ppc", "google ads", "facebook ads", "e-commerce marketing", "performance marketing"]
+      "relevant_for": [
+        "paid advertising",
+        "roas",
+        "ppc",
+        "google ads",
+        "facebook ads",
+        "e-commerce marketing",
+        "performance marketing"
+      ]
     },
     {
       "id": "accutrain-website-portfolio",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "training services", "e-commerce"],
+      "industry_tags": [
+        "education",
+        "training services",
+        "e-commerce"
+      ],
       "challenge": "A growing portfolio of websites and landing pages across many product lines had no unified performance visibility.",
       "action": "Conceived, built, and managed 15+ websites, 100+ landing pages, and an e-commerce site on WordPress, plus a custom real-time KPI dashboard spanning all 15 sites and integrating Google Ads, YouTube, and Facebook Ads.",
       "result": "Portfolio sites generated 4,000-18,000 monthly visits with full real-time performance visibility across the whole portfolio.",
-      "relevant_for": ["website management at scale", "wordpress", "multi-site marketing", "kpi dashboards", "martech reporting", "landing page optimization"]
+      "relevant_for": [
+        "website management at scale",
+        "wordpress",
+        "multi-site marketing",
+        "kpi dashboards",
+        "martech reporting",
+        "landing page optimization"
+      ]
     },
     {
       "id": "accutrain-covid-pivot",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "events", "training services"],
+      "industry_tags": [
+        "education",
+        "events",
+        "training services"
+      ],
       "challenge": "COVID-19 eliminated in-person conferences, threatening a core revenue line built around live events.",
       "action": "Led the pivot to virtual conference events.",
       "result": "Drove 1,000+ attendees and $250,000+ in registration revenue through the virtual format.",
-      "relevant_for": ["crisis pivot", "business continuity", "virtual events", "adaptability", "revenue protection during disruption"]
+      "relevant_for": [
+        "crisis pivot",
+        "business continuity",
+        "virtual events",
+        "adaptability",
+        "revenue protection during disruption"
+      ]
     },
     {
       "id": "priority-chevrolet-turnaround",
       "company": "Priority Chevrolet",
       "role": "Internet Sales Manager → Digital Marketing Manager",
-      "industry_tags": ["automotive retail", "dealership", "local business"],
+      "industry_tags": [
+        "automotive retail",
+        "dealership",
+        "local business"
+      ],
       "challenge": "The dealership's internet sales department was the lowest performing in a 26-dealer regional group.",
       "action": "Recruited into the role to turn the department around; rebuilt process and managed a team of 7 Internet Sales Consultants.",
       "result": "Took the department from lowest to #1 New Car Sales performer in the Mid-Atlantic Region and top of the 26-dealer district within one year.",
-      "relevant_for": ["sales team turnaround", "underperforming team", "sales management", "automotive retail", "local business marketing"]
+      "relevant_for": [
+        "sales team turnaround",
+        "underperforming team",
+        "sales management",
+        "automotive retail",
+        "local business marketing"
+      ]
     },
     {
       "id": "priority-chevrolet-coop-budget",
       "company": "Priority Chevrolet",
       "role": "Internet Sales Manager → Digital Marketing Manager",
-      "industry_tags": ["automotive retail", "dealership", "local business"],
+      "industry_tags": [
+        "automotive retail",
+        "dealership",
+        "local business"
+      ],
       "challenge": "A $50K/month ad budget needed to stretch further without increasing dealership-level cost, while directing multiple outside agencies.",
       "action": "Negotiated GM co-op advertising partnerships to double effective marketing spend while reducing dealership-level costs, and directed 4 marketing agencies across SEO, SEM, Display, Video, Facebook, and Email in compliance with GM Co-Op standards.",
       "result": "63% (2014) and 84% (2015) YoY website traffic growth; Internet Sales grew 31% (2014) and 42% (2015); total new vehicle sales grew 16% (2014) and 13% (2015).",
-      "relevant_for": ["budget optimization", "co-op advertising", "agency management", "franchise and dealer marketing", "local automotive marketing"]
+      "relevant_for": [
+        "budget optimization",
+        "co-op advertising",
+        "agency management",
+        "franchise and dealer marketing",
+        "local automotive marketing"
+      ]
     },
     {
       "id": "priority-chevrolet-crm-personalization",
       "company": "Priority Chevrolet",
       "role": "Internet Sales Manager → Digital Marketing Manager",
-      "industry_tags": ["automotive retail", "dealership", "local business", "crm", "email marketing"],
+      "industry_tags": [
+        "automotive retail",
+        "dealership",
+        "local business",
+        "crm",
+        "email marketing"
+      ],
       "challenge": "With 25 sales reps and heavy service-department foot traffic, most CRM data on past purchases and vehicle equity sat unused — no systematic way to flag high-value upsell opportunities to the right salesperson at the right moment.",
       "action": "Ensured all leads flowed into the CRM and kept the sales team working in it daily, then personally data-mined it to identify customers likely in a positive equity position on their current vehicle based on purchase history and timing. Flagged those individuals to specific sales reps in real time when they came in for service, prompting a proactive upsell conversation while they waited.",
       "result": "Turned routine service visits into upsell opportunities the dealership would otherwise have missed — a data-driven personalization tactic built directly into daily sales workflow across a 25-person team.",
-      "relevant_for": ["crm", "email marketing", "data-driven marketing", "personalization", "upselling", "sales and marketing alignment", "customer lifecycle", "automotive retail"]
+      "relevant_for": [
+        "crm",
+        "email marketing",
+        "data-driven marketing",
+        "personalization",
+        "upselling",
+        "sales and marketing alignment",
+        "customer lifecycle",
+        "automotive retail"
+      ]
     },
     {
       "id": "accutrain-email-lifecycle",
       "company": "Accutrain Corporation",
       "role": "Digital Marketing Manager",
-      "industry_tags": ["education", "e-commerce", "email marketing", "b2c"],
+      "industry_tags": [
+        "education",
+        "e-commerce",
+        "email marketing",
+        "b2c"
+      ],
       "challenge": "An e-commerce site selling books and games to educators had no automated way to re-engage past buyers with relevant follow-up offers.",
       "action": "Built behavioral email automation tied to purchase category — a customer buying a book in a given category was automatically enrolled in a recurring (roughly biweekly) email sequence surfacing related titles in that same category.",
       "result": "Turned one-time e-commerce purchases into an ongoing, automated re-engagement channel without manual list management.",
-      "relevant_for": ["email marketing", "lifecycle marketing", "marketing automation", "e-commerce", "behavioral segmentation", "customer retention"]
+      "relevant_for": [
+        "email marketing",
+        "lifecycle marketing",
+        "marketing automation",
+        "e-commerce",
+        "behavioral segmentation",
+        "customer retention"
+      ]
     }
   ],
   "facts": [
@@ -363,13 +593,11 @@
       "headline": "These factors include:",
       "bullets": [
         "Targeting and market analysis",
-        "Cost-efficient, high-converting creative",
-        "A landing page environment built to convert visitors into leads",
-        "Optimizing speed-to-lead and the follow-up process",
-        "Monitoring sales accountability",
-        "And more"
+        "High-converting creative and a landing page environment built to convert visitors into leads",
+        "Optimizing speed-to-lead and the follow-up process — where a stalled pipeline usually hides, long before traffic is the problem",
+        "Monitoring sales accountability"
       ],
-      "usage_note": "Use the opener_template as the intended content and confident tone, filling in the visitor's actual business/industry naturally — but adapt its exact wording to stay grammatically correct for how the visitor actually phrased their question (see the GRAMMATICAL AGREEMENT rule in the system prompt). Don't paraphrase away the substance, just the literal words when they don't fit. The speed-to-lead/follow-up and sales-accountability bullets are the differentiator most businesses skip — don't drop them just to keep the reply short. Always still pair this playbook with one real case study citation as proof, per the normal grounding rules."
+      "usage_note": "Use the opener_template as the intended content and confident tone, filling in the visitor's actual business/industry naturally — but adapt its exact wording to stay grammatically correct for how the visitor actually phrased their question (see the GRAMMATICAL AGREEMENT rule in the system prompt). Don't paraphrase away the substance, just the literal words when they don't fit. The speed-to-lead/follow-up and sales-accountability bullets are the differentiator most businesses skip — keep both when you use this playbook. Always still pair this playbook with one real case study citation as proof, per the normal grounding rules."
     },
     {
       "id": "website-cro",
