@@ -79,8 +79,8 @@
         "saas",
         "b2b tech"
       ],
-      "challenge": "After a domain migration (Blueshift Cybersecurity to IntelliThreat), the site lost most of its search visibility with no clear diagnosis of why.",
-      "action": "Ran a full technical SEO audit, root-causing the visibility loss to botched migration redirects (271 of 307 URLs dumping to the homepage instead of equivalent pages), and shipped fixes (titles, meta descriptions, schema) across 32 priority pages. Also ran a forward-looking AI-search readiness audit — evaluating and improving whether AI assistants like Perplexity and ChatGPT cite the site, not just whether Google ranks it.",
+      "challenge": "After a domain migration (Blueshift Cybersecurity to IntelliThreat), the website lost most of its search visibility with no clear diagnosis of why.",
+      "action": "Ran a full technical SEO audit, root-causing the visibility loss to botched migration redirects (271 of 307 URLs dumping to the homepage instead of equivalent pages), and shipped fixes (titles, meta descriptions, schema) across 32 priority pages. Also ran a forward-looking AI-search readiness audit — evaluating and improving whether AI assistants like Perplexity and ChatGPT cite the website, not just whether Google ranks it.",
       "result": "Verified Perplexity already citing IntelliThreat by name for a real buyer query (\"best autonomous AI threat detection and response platform for M365 that keeps data in tenant\") as of September 2026. The core indexing fix from the migration issue is fully diagnosed with a clear remediation plan; that specific fix is in progress, not yet complete — flagged honestly rather than overstated.",
       "relevant_for": [
         "seo",
@@ -318,8 +318,8 @@
         "e-commerce"
       ],
       "challenge": "A growing portfolio of websites and landing pages across many product lines had no unified performance visibility.",
-      "action": "Conceived, built, and managed 15+ websites, 100+ landing pages, and an e-commerce site on WordPress, plus a custom real-time KPI dashboard spanning all 15 sites and integrating Google Ads, YouTube, and Facebook Ads.",
-      "result": "Portfolio sites generated 4,000-18,000 monthly visits with full real-time performance visibility across the whole portfolio.",
+      "action": "Conceived, built, and managed 15+ websites, 100+ landing pages, and an e-commerce website on WordPress, plus a custom real-time KPI dashboard spanning all 15 websites and integrating Google Ads, YouTube, and Facebook Ads.",
+      "result": "Portfolio websites generated 4,000-18,000 monthly visits with full real-time performance visibility across the whole portfolio.",
       "relevant_for": [
         "website management at scale",
         "wordpress",
@@ -424,7 +424,7 @@
         "email marketing",
         "b2c"
       ],
-      "challenge": "An e-commerce site selling books and games to educators had no automated way to re-engage past buyers with relevant follow-up offers.",
+      "challenge": "An e-commerce website selling books and games to educators had no automated way to re-engage past buyers with relevant follow-up offers.",
       "action": "Built behavioral email automation tied to purchase category — a customer buying a book in a given category was automatically enrolled in a recurring (roughly biweekly) email sequence surfacing related titles in that same category.",
       "result": "Turned one-time e-commerce purchases into an ongoing, automated re-engagement channel without manual list management.",
       "relevant_for": [
