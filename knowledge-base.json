@@ -1,9 +1,9 @@
 {
   "person": {
     "name": "Robert Lamb",
-    "title": "Full-Stack, AI-Accelerated Marketing Executive",
+    "title": "Full-Funnel Revenue & Marketing Optimization",
     "location": "Virginia Beach, VA",
-    "summary": "15 years leading marketing teams of up to 18 (direct, agency, reseller) and budgets of $300K+ across SaaS, cloud, and cybersecurity. Personally hands-on across every major channel (SEO, paid search/social, organic social, CRM/marketing automation, graphic/video production) and now uses AI production tools (Claude, Higgsfield, Remotion) to execute that same full stack faster and leaner than a traditional team or agency."
+    "summary": "15+ years leading marketing teams of up to 25 (direct, agency, reseller) and budgets of $300K+ across SaaS, cloud, and cybersecurity. Personally hands-on across every major channel (SEO, paid search/social, organic social, CRM/marketing automation, graphic/video production) and now uses AI production tools (Claude, Higgsfield, Remotion) to execute that same full stack faster and leaner than a traditional team or agency."
   },
   "case_studies": [
     {
@@ -18,7 +18,7 @@
       ],
       "challenge": "A 3-month-old cybersecurity company needed a full rebrand and an ongoing stream of website, video, and sales collateral production, but traditional agency/dev costs and turnaround times were too slow and expensive for a startup.",
       "action": "Led the full rebrand from Blueshift Cybersecurity to IntelliThreat and brought website/video/collateral production in-house, building an AI-accelerated production pipeline using Claude, Higgsfield, Elementor/WordPress, and Remotion. Range extends beyond AI prompting alone — e.g. the homepage's radar/scanner animations were built as code-rendered assets (Python/Pillow/ffmpeg), not AI-generated, when that was the better tool for the job.",
-      "result": "Saved $200K+ in production costs and dramatically accelerated turnaround time versus outsourcing to agencies or traditional dev teams.",
+      "result": "Saved $300K+ in production costs and dramatically accelerated turnaround time versus outsourcing to agencies or traditional dev teams.",
       "relevant_for": [
         "rebrand",
         "website costs",
@@ -94,24 +94,25 @@
       ]
     },
     {
-      "id": "ai-orchestrated-job-search-ops",
-      "company": "Personal project — Robert's own job search",
-      "role": "Builder / Operator",
+      "id": "outbound-automation-build",
+      "company": "Not disclosed",
+      "role": "Architect / Builder",
       "industry_tags": [
-        "personal productivity",
+        "b2b saas",
         "marketing automation",
         "systems design"
       ],
-      "challenge": "Running an effective modern job search meant coordinating five disconnected tools — lead sourcing, LinkedIn outreach, cold email, CRM logging, personalized video — normally requiring constant manual dashboard-switching with no real visibility into what's actually working.",
-      "action": "Architected and built an AI-orchestrated growth-ops stack — lead sourcing (Lemlist), automated email outreach (Smartlead), LinkedIn outreach, CRM logging (HubSpot), and personalized AI video outreach (SendSpark), all controlled through one conversational interface — then built \"JobbyFind,\" a live operations dashboard that pulls real data automatically every day (Google Analytics, Smartlead, Lemlist) and generates honest AI-driven daily insights, including uncomfortable ones, not just vanity metrics.",
-      "result": "He applies his own tools to his own goals — exactly what he'd do for a client or employer. Full-stack tool orchestration, live measurement instead of guesswork, and the discipline to self-report honestly on what's working and what isn't.",
+      "challenge": "Cold-list outreach ran through a stack of disconnected tools — lead sourcing, LinkedIn outreach, cold email, CRM logging, personalized video, analytics — with multiple manual steps between them, spread across people and systems, and no real visibility into what was actually working.",
+      "action": "Mapped every manual step, then automated out the logjams. Architected and built the rebuilt path across 9 connected systems — lead sourcing (Lemlist), automated email outreach (Smartlead), LinkedIn outreach, CRM logging (HubSpot), personalized AI video (SendSpark), and the webhook and analytics layers tying them together — all controlled through one conversational interface. Every touch writes back to a single CRM record. Also built a live operations dashboard that pulls real data automatically every day and generates honest daily insights, including uncomfortable ones, not just vanity metrics.",
+      "result": "Lead sourcing, outreach, intent capture and AI video send all run unattended across 9 connected systems, with live measurement replacing guesswork — a cold list reaches a booked meeting with no one driving it.",
       "relevant_for": [
         "ai orchestration",
         "marketing automation",
         "crm integration",
         "systems thinking",
-        "personal productivity systems",
-        "does he practice what he preaches",
+        "outbound",
+        "cold outreach",
+        "sales automation",
         "technology mastery",
         "process design"
       ]
@@ -126,9 +127,9 @@
         "b2b tech",
         "startup"
       ],
-      "challenge": "Company had no formal marketing department or process at all — needed to build lead generation from zero and turn it into predictable revenue growth.",
-      "action": "Built and ran inbound lead generation (paid campaigns + website) over 4 years, plus account-based demand generation targeting key accounts.",
-      "result": "Scaled the company 15x — from 10 to 150 customers across 10 countries — after building the entire lead-generation function from zero.",
+      "challenge": "Robert was the first marketing hire at a young, well-funded-competitor-surrounded company with a few local customers — no marketing staff, no website, no CRM, no collateral or asset library, no ad history, and no channel or partner enablement. Lead generation had to be built from zero and turned into predictable revenue growth.",
+      "action": "Built and ran inbound lead generation (paid campaigns + website), plus account-based demand generation targeting key accounts.",
+      "result": "Scaled the company 15x — from 10 to 150 customers across 10+ countries — after building the entire lead-generation function from zero.",
       "relevant_for": [
         "lead generation",
         "conversion rate",
@@ -151,7 +152,7 @@
         "channel"
       ],
       "challenge": "Needed to scale go-to-market internationally without building out a large direct sales/marketing team in every region.",
-      "action": "Recruited 50+ reseller partners across 10 countries and consulted directly with partners to build and optimize their external marketing campaigns.",
+      "action": "Recruited 50+ reseller partners across 10+ countries and consulted directly with partners to build and optimize their external marketing campaigns.",
       "result": "Drove over 100 end-user accounts through the partner channel.",
       "relevant_for": [
         "channel partners",
@@ -213,8 +214,8 @@
         "professional services",
         "multi-client"
       ],
-      "challenge": "Agency needed to grow its client base and close more new business while running 40+ concurrent client projects.",
-      "action": "Owned strategy, deliverables, and client relationships across 40+ clients; partnered directly with sales to develop and pitch proposals, and personally prepared, presented, and closed sales proposals.",
+      "challenge": "Agency needed to grow its client base and close more new business while running 45 concurrent client projects.",
+      "action": "Owned strategy, deliverables, and client relationships across 45 clients; partnered directly with sales to develop and pitch proposals, and personally prepared, presented, and closed sales proposals.",
       "result": "Grew the client list 67% in 8 months and personally closed 80% of proposals, up to $8,000+/month in value per new client.",
       "relevant_for": [
         "agency growth",
@@ -274,15 +275,18 @@
         "consumer"
       ],
       "challenge": "10 national education conferences needed stronger registration numbers and event revenue growth year over year — fundamentally a consumer sale: convincing an individual educator to personally decide to travel, pay, and attend, not a top-down institutional purchase.",
-      "action": "Directed digital marketing strategy and execution for all 10 national education conferences, selling the in-person, multi-day experience entirely online — website, video, paid ads, testimonials, and email marketing.",
-      "result": "Grew registrations nearly 80% over two years (2018-2019) and increased event revenue 42% in 2018 (+$358K) and 32% in 2019 (+$388K).",
+      "action": "Directed digital marketing strategy and execution for all 10 national education conferences across 6 channels — Google Ads, Facebook Ads, YouTube Ads, LinkedIn Ads, SEO, and email, with advanced CRM targeting behind them — selling the in-person, multi-day experience entirely online, with website, video, paid ads and testimonials supporting it. Each conference and channel had its own dashboard, so he consolidated all of them into a single executive-level view built to diagnose the funnel, not just report on it.",
+      "result": "Grew registrations nearly 80% over two years (2018-2019) and increased event revenue 42% in 2018 (+$358K) and 32% in 2019 (+$388K) — $746K in event revenue added. The season closed at $3.24M in registration revenue at a 4.8x return on ad spend.",
       "relevant_for": [
         "event marketing",
         "conference and registration growth",
         "education industry",
         "b2c marketing",
         "consumer sales",
-        "revenue growth from events"
+        "revenue growth from events",
+        "executive dashboards",
+        "marketing attribution",
+        "single source of truth"
       ]
     },
     {
@@ -317,16 +321,19 @@
         "training services",
         "e-commerce"
       ],
-      "challenge": "A growing portfolio of websites and landing pages across many product lines had no unified performance visibility.",
-      "action": "Conceived, built, and managed 15+ websites, 100+ landing pages, and an e-commerce website on WordPress, plus a custom real-time KPI dashboard spanning all 15 websites and integrating Google Ads, YouTube, and Facebook Ads.",
-      "result": "Portfolio websites generated 4,000-18,000 monthly visits with full real-time performance visibility across the whole portfolio.",
+      "challenge": "10 conferences ran on 10 separate, poorly performing websites, with strategy, ad spend, SEO and email all split 10 ways — diluted SEO authority, no funnel visibility, and maintenance work crowding out strategy.",
+      "action": "Conceived, built, and managed a 10-website portfolio plus 100+ landing pages and an e-commerce website on WordPress, then consolidated the 10 conference funnels into 1 on a single domain — every channel on one domain, SEO authority consolidated, and built for low-cost upkeep so maintenance time became strategy time. Added a custom real-time KPI dashboard tracking all 10 websites and integrating Google Ads, YouTube, and Facebook Ads.",
+      "result": "10 funnels nobody could optimize became 1 that could be. Portfolio websites generated 4,000-18,000 monthly visits with full real-time performance visibility across the whole portfolio.",
       "relevant_for": [
         "website management at scale",
         "wordpress",
         "multi-site marketing",
         "kpi dashboards",
         "martech reporting",
-        "landing page optimization"
+        "landing page optimization",
+        "website consolidation",
+        "domain consolidation",
+        "seo authority"
       ]
     },
     {
@@ -360,7 +367,7 @@
       ],
       "challenge": "The dealership's internet sales department was the lowest performing in a 26-dealer regional group.",
       "action": "Recruited into the role to turn the department around; rebuilt process and managed a team of 7 Internet Sales Consultants.",
-      "result": "Took the department from lowest to #1 New Car Sales performer in the Mid-Atlantic Region and top of the 26-dealer district within one year.",
+      "result": "Took the department from lowest to #1 New Car Sales performer in the Mid-Atlantic Region and top of the 26-dealer district within one year, tripling sales per month.",
       "relevant_for": [
         "sales team turnaround",
         "underperforming team",
@@ -380,7 +387,7 @@
       ],
       "challenge": "A $50K/month ad budget needed to stretch further without increasing dealership-level cost, while directing multiple outside agencies.",
       "action": "Negotiated GM co-op advertising partnerships to double effective marketing spend while reducing dealership-level costs, and directed 4 marketing agencies across SEO, SEM, Display, Video, Facebook, and Email in compliance with GM Co-Op standards.",
-      "result": "63% (2014) and 84% (2015) YoY website traffic growth; Internet Sales grew 31% (2014) and 42% (2015); total new vehicle sales grew 16% (2014) and 13% (2015).",
+      "result": "63% (2014) and 84% (2015) YoY website traffic growth; Internet Sales grew 31% (2014) and 42% (2015); total new vehicle sales grew 16% (2014) and 13% (2015) — with $25K/month saved by replacing the ineffective agencies.",
       "relevant_for": [
         "budget optimization",
         "co-op advertising",
@@ -401,8 +408,8 @@
         "email marketing"
       ],
       "challenge": "With 25 sales reps and heavy service-department foot traffic, most CRM data on past purchases and vehicle equity sat unused — no systematic way to flag high-value upsell opportunities to the right salesperson at the right moment.",
-      "action": "Ensured all leads flowed into the CRM and kept the sales team working in it daily, then personally data-mined it to identify customers likely in a positive equity position on their current vehicle based on purchase history and timing. Flagged those individuals to specific sales reps in real time when they came in for service, prompting a proactive upsell conversation while they waited.",
-      "result": "Turned routine service visits into upsell opportunities the dealership would otherwise have missed — a data-driven personalization tactic built directly into daily sales workflow across a 25-person team.",
+      "action": "Ensured all leads flowed into the CRM and kept the sales team working in it daily, then personally data-mined it three ways. (1) Daily CRM scans flagged service customers sitting in positive equity — the salesperson met them at the service visit, and most could upgrade without raising their payment. (2) Monthly automated email, phone and text campaigns sold extended service contracts to owners whose factory warranty was expiring. (3) When the used car manager couldn't source a model at auction, he found owners of that exact vehicle in the CRM with equity and bought the cars outright.",
+      "result": "$1.2M in revenue from customers the dealership already had, at $0 lead cost — while $50K a month was going to attracting new leads. A data-driven personalization system built into the daily sales workflow across a 25-person sales team.",
       "relevant_for": [
         "crm",
         "email marketing",
@@ -411,7 +418,10 @@
         "upselling",
         "sales and marketing alignment",
         "customer lifecycle",
-        "automotive retail"
+        "automotive retail",
+        "existing customer revenue",
+        "service to sales conversion",
+        "zero cost revenue"
       ]
     },
     {
@@ -434,6 +444,56 @@
         "e-commerce",
         "behavioral segmentation",
         "customer retention"
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "pennel-priority-auto",
+      "quote": "If I was starting my own business, Robert would be my first hire.",
+      "name": "Matthew Pennel",
+      "title": "Digital Performance & Marketing Director",
+      "company": "Priority Auto Group",
+      "context": "Worked alongside Robert on a $50K monthly managed ad budget in automotive retail.",
+      "relevant_for": [
+        "references",
+        "testimonials",
+        "what do others say about you",
+        "leadership",
+        "would people rehire you",
+        "automotive retail"
+      ]
+    },
+    {
+      "id": "price-accutrain",
+      "quote": "Robert transformed our entire digital presence, which helped us achieve record-breaking revenue growth.",
+      "name": "Phil Price",
+      "title": "President",
+      "company": "AccuTrain",
+      "context": "Robert's direct executive sponsor at AccuTrain, where registrations grew 80%.",
+      "relevant_for": [
+        "references",
+        "testimonials",
+        "what do others say about you",
+        "executive sponsorship",
+        "revenue growth",
+        "event marketing"
+      ]
+    },
+    {
+      "id": "taylor-grx",
+      "quote": "I've seen Robert take a lot of rough ideas and bring them to life. He consistently finds ways to save time and money on every project we've partnered on. He's a pleasure to work with and an expert at his craft.",
+      "name": "Melody Taylor",
+      "title": "Owner",
+      "company": "GRX Solutions",
+      "context": "Partnered with Robert across multiple projects.",
+      "relevant_for": [
+        "references",
+        "testimonials",
+        "what do others say about you",
+        "working style",
+        "cost savings",
+        "execution"
       ]
     }
   ],
@@ -462,11 +522,12 @@
     {
       "id": "why-next-challenge",
       "topic": "Why is Robert leaving IntelliThreat / looking for something new?",
-      "headline": "4.5+ years at IntelliThreat, built the marketing function from the ground up — ready for the next challenge.",
+      "headline": "Built IntelliThreat's entire marketing function from the ground up and scaled it 10 to 150 customers — ready for the next challenge.",
       "bullets": [
-        "Scaled the company 15x (10 to 150 customers across 10 countries) after building lead generation from zero",
-        "Cut website production costs $200K+ by building an in-house, AI-accelerated production pipeline",
-        "50% of new revenue sourced from a single owned LinkedIn program"
+        "Scaled the company 15x (10 to 150 customers across 10+ countries) after building lead generation from zero",
+        "Cut website production costs $300K+ by building an in-house, AI-accelerated production pipeline",
+        "50% of new revenue sourced from a single owned LinkedIn program",
+        "Tenure was 4.5+ years — available if asked directly, but the customer growth is the proof point, not the duration"
       ]
     },
     {
@@ -521,8 +582,12 @@
     {
       "id": "references",
       "topic": "Does Robert have references or testimonials?",
-      "headline": "References available upon request.",
-      "bullets": []
+      "headline": "References available upon request — and three named testimonials are already public on the website.",
+      "bullets": [
+        "Matthew Pennel, Digital Performance & Marketing Director at Priority Auto Group",
+        "Phil Price, President at AccuTrain",
+        "Melody Taylor, Owner at GRX Solutions"
+      ]
     },
     {
       "id": "cross-industry-breadth",
@@ -549,6 +614,19 @@
         "Launches multiple ad variants, not just one — expects several won't perform, that's data, not failure",
         "Diagnoses exactly why: ad copy, targeting, placement, or the landing page it's sending traffic to",
         "Proof: the IntelliThreat YouTube ad campaigns went through 40+ iterations before landing on the final cut — same discipline, real example"
+      ]
+    },
+    {
+      "id": "platforms-and-tools",
+      "topic": "What platforms, tools, and systems does Robert actually know? Does he know our stack?",
+      "headline": "Hands-on across the full modern marketing stack — CRM, ads, web, automation, analytics, and AI production.",
+      "bullets": [
+        "CRM and automation: Salesforce, HubSpot, Pipedrive, Zoho, GoHighLevel, ActiveCampaign, Mailchimp, Make, Manychat, Twilio",
+        "Ads and reporting: Google Ads (campaign management and conversions), LinkedIn Ads and Lead Forms, Facebook Lead Ads, Google Analytics 4, Google Search Console, Semrush",
+        "Web and commerce: WordPress, Elementor, Shopify, ClickFunnels 2.0, Yoast, Cloudflare, Typeform, Eventbrite",
+        "AI and production: Anthropic Claude, OpenAI (ChatGPT, Sora, Whisper), Google Gemini, ElevenLabs, Firecrawl, Fireflies.ai",
+        "Ops and PM: monday.com, ClickUp, Airtable, Notion, Zendesk, QuickBooks, Zoom",
+        "The pattern matters more than the list — he has stood these up from zero (Salesforce at IntelliThreat) and inherited and fixed them, so a stack he hasn't touched is a weekend, not a gap"
       ]
     }
   ],
@@ -706,6 +784,10 @@
     {
       "id": "sales-marketing-integration",
       "principle": "Marketing and sales should never operate in silos — the tightest integration between them wins. When a salesperson is in a live conversation with a prospect, every question that prospect asks is marketing intelligence: it reveals what messaging to build next, what objections to preempt in ad copy, and what confusion to clear up on the website or in the product story. If one prospect is confused about something, the broader market probably is too — that feedback loop should flow straight back into campaigns and content, not get lost after the call ends. Example mechanics: a lead comes in from marketing, becomes a meeting, and whatever the prospect is confused about or asks in that meeting becomes input for new ad angles or clearer messaging. This is why Robert frames himself as a revenue-optimization specialist, not just a marketing-optimization one. Rob specifically wants this point made as often as it's genuinely relevant — lean toward surfacing it for any question touching sales process, CRM, lead handoff, or the marketing/sales relationship, more proactively than the other positioning principles, while still not forcing it into replies where it doesn't fit."
+    },
+    {
+      "id": "four-stage-funnel-diagnosis",
+      "principle": "Robert works one funnel in 4 stages: (1) Targeting & Platforms — audience targeting, paid media, creative and messaging, channel mix; (2) Revenue & Pipeline — revenue generation, ROI improvement, CRM hygiene, revenue attribution; (3) AI & Automation — AI stood up across the stack, automated production pipelines, marketing automation and nurture; (4) Product & Analytics — digital analytics and dashboards, website development, conversion-focused design, lead generation. Most problems are strategic and operational at once, so diagnosis means zooming out to find which stage is actually broken, then zooming in to fix it — it takes both views to know whether one stage is broken or all 4. Use this as the diagnostic frame when a visitor describes a vague or whole-funnel problem: name the stage their symptom actually points to rather than listing all 4 back at them."
     }
   ]
 }
