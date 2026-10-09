@@ -527,7 +527,7 @@
         "Scaled the company 15x (10 to 150 customers across 10+ countries) after building lead generation from zero",
         "Cut website production costs $300K+ by building an in-house, AI-accelerated production pipeline",
         "50% of new revenue sourced from a single owned LinkedIn program",
-        "Tenure was 4.5+ years — available if asked directly, but the customer growth is the proof point, not the duration"
+        "The 10-to-150 build took about 4 years; total tenure was 4.5+ years — both answerable if asked directly, but the customer growth is always the proof point, never the duration"
       ]
     },
     {
@@ -653,13 +653,13 @@
     "This is home turf."
   ],
   "breadth_teasers": [
-    "This is one example — the real number is 45-50+ clients across my agency years, and there's more to walk through live.",
+    "This is one example — the real number is 45 clients across my agency years, and there's more to walk through live.",
     "That's a single case study; the fuller picture spans dozens of clients I can bring to a call.",
-    "One data point from a much longer track record — 45+ clients, multiple industries, happy to go deeper live.",
-    "I'm only showing you a slice here — the agency years alone cover 45-50+ clients worth of examples.",
+    "One data point from a much longer track record — 45 clients, multiple industries, happy to go deeper live.",
+    "I'm only showing you a slice here — the agency years alone cover 45 clients worth of examples.",
     "There's more behind this than one case study — ask me on a call and I'll pull other relevant ones.",
-    "This barely scratches the surface — 45+ client campaigns worth of material I haven't touched on yet.",
-    "Consider this a preview — the real archive runs 45-50+ clients deep.",
+    "This barely scratches the surface — 45 client campaigns worth of material I haven't touched on yet.",
+    "Consider this a preview — the real archive runs 45 clients deep.",
     "Happy to bring more than this one example to a call — the agency work alone covers dozens of companies."
   ],
   "playbooks": [
@@ -668,7 +668,7 @@
       "topic": "lead generation",
       "trigger_description": "Visitor wants more leads, more inbound traffic that converts, or says their website/marketing isn't producing enough leads or customers.",
       "opener_template": "[YES_VARIANT]. [Visitor's business/industry], like most other industries, relies on the same factors I've spent my career optimizing for successful lead generation campaigns.",
-      "headline": "These factors include:",
+      "headline": "Where a thin pipeline usually comes from:",
       "bullets": [
         "Targeting, creative and a landing page environment built to convert visitors into leads",
         "Optimizing speed-to-lead and the follow-up process — where a stalled pipeline usually hides, long before traffic is the problem",
@@ -681,15 +681,12 @@
       "topic": "website / conversion rate optimization",
       "trigger_description": "Visitor's website gets traffic but doesn't convert, or asks generally about improving their website's performance.",
       "opener_template": "[YES_VARIANT]. Website conversion is one of the most fixable problems there is, and [visitor's business], like most others, comes down to the same handful of factors I've spent my career optimizing.",
-      "headline": "These factors include:",
+      "headline": "Where conversion actually breaks:",
       "bullets": [
-        "Above-the-fold clarity",
-        "Call-to-action placement and visibility",
-        "Page speed and mobile experience",
-        "Form friction and checkout flow",
-        "Trust signals and social proof",
-        "Ongoing testing, not a one-time build",
-        "And more"
+        "Above-the-fold clarity — whether a visitor knows what you do in 5 seconds",
+        "Call-to-action placement, and whether the primary action is visible without scrolling",
+        "Form friction and checkout flow — every extra field costs you completed conversions",
+        "Ongoing testing rather than a one-time build, so the page keeps improving after launch"
       ],
       "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof."
     },
@@ -698,15 +695,12 @@
       "topic": "paid advertising performance",
       "trigger_description": "Visitor's ad spend isn't converting, ROAS is poor, or they ask generally about running more profitable paid campaigns.",
       "opener_template": "[YES_VARIANT]. Profitable ad spend for [visitor's business] runs on the same discipline regardless of industry — the factors I've spent my career optimizing for.",
-      "headline": "These factors include:",
+      "headline": "Where profitable spend is won or lost:",
       "bullets": [
-        "Account structure and negative keywords",
-        "Audience and targeting precision",
-        "Creative testing cadence",
-        "Landing page match to ad intent",
-        "Tracking and attribution accuracy",
-        "Budget allocation across channels",
-        "And more"
+        "Account structure and negative keywords — usually where the wasted spend is hiding",
+        "Landing page match to ad intent, so a paid click has somewhere right to land",
+        "Tracking and attribution accuracy — without it you're optimizing on guesses",
+        "Creative testing run as a standing cadence, not a one-time launch"
       ],
       "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof."
     },
@@ -715,13 +709,12 @@
       "topic": "rebrand and fast production",
       "trigger_description": "Visitor is launching or rebranding and needs a website, video, or marketing assets fast, often without a big budget.",
       "opener_template": "[YES_VARIANT]. A fast, high-quality rebrand for [visitor's business] is absolutely doable without a six-figure retainer — it comes down to a few specific factors I've built my whole production approach around.",
-      "headline": "These factors include:",
+      "headline": "What makes a fast rebrand work:",
       "bullets": [
-        "Messaging and positioning first",
-        "AI-accelerated, in-house production",
-        "Speed without sacrificing quality",
-        "Protecting existing brand equity",
-        "And more"
+        "Messaging and positioning settled first, before anyone designs a logo",
+        "Production brought in-house, where both the cost and the turnaround collapse",
+        "Speed without sacrificing quality — that's a sequencing problem, not a tradeoff",
+        "Protecting the brand equity you already have instead of starting from scratch"
       ],
       "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof (the AI-production-pipeline or video-ad-production case studies fit especially well here)."
     },
@@ -730,14 +723,13 @@
       "topic": "team building and marketing leadership",
       "trigger_description": "Visitor wants to build or run a marketing function/team, or asks about hiring, managing, or leading marketing staff.",
       "opener_template": "[YES_VARIANT]. Building a marketing function that actually delivers for [visitor's business] comes down to the same factors regardless of industry — ones I've spent my career refining.",
-      "headline": "These factors include:",
+      "headline": "What a marketing function needs to actually deliver:",
       "bullets": [
-        "Hiring around real channel expertise",
-        "Process and accountability from day one",
-        "Right mix of in-house, agency, and AI",
-        "Coaching and mentoring team members to grow past where they started — genuinely one of my favorite parts of leading a team",
-        "Staying hands-on enough to evaluate the work",
-        "And more"
+        "Hiring around real channel expertise, not generalists who touch everything",
+        "Process and accountability from day one, before the team gets big",
+        "Coaching and mentoring people past where they started — genuinely my favorite part of leading a team",
+        "The right mix of in-house, agency and AI for the budget you actually have",
+        "Staying hands-on enough to judge the work honestly"
       ],
       "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof. Don't drop the coaching/mentoring bullet to save space — it's a genuine personal point Robert wants made, not filler. If a visitor asks specifically about mentoring/coaching, the real proof point is: he hired a paid-ads intern, coached them up through paid ad specialist, and they're now a paid ads manager overseeing multiple client campaigns — someone who now knows more about paid ads than he does in that specialty. Use only if asked directly; don't force it into the standard bullet list."
     },
@@ -746,14 +738,12 @@
       "topic": "competitive pressure",
       "trigger_description": "Visitor says competitors are outselling them or outperforming them, or asks how to close a competitive gap.",
       "opener_template": "[YES_VARIANT]. Closing the gap on a competitor outselling [visitor's business] is rarely about working harder — it comes down to a specific, fixable set of factors.",
-      "headline": "These factors include:",
+      "headline": "Where a competitive gap actually opens:",
       "bullets": [
-        "Messaging and positioning differentiation",
-        "Diagnosing where you're actually losing — awareness, consideration, or close",
-        "Competitive and market analysis",
-        "Offer and pricing positioning",
-        "Fast, focused turnarounds",
-        "And more"
+        "Messaging and positioning differentiation — sounding the same is the real problem",
+        "Diagnosing where you're actually losing — awareness, consideration, or the close",
+        "Offer and pricing positioning against what they put in front of the same buyer",
+        "Fast, focused turnarounds instead of a six-month replatform"
       ],
       "usage_note": "Same rules as lead-generation: adapt opener wording to the visitor's actual phrasing, use a fresh yes_variant, pair with one real case study citation as proof — the Priority Chevrolet turnaround case study is an especially strong fit here (lowest to #1 in a competitive 26-dealer region within a year)."
     },
