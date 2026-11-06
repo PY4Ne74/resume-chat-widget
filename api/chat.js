@@ -305,7 +305,17 @@ module.exports = async (req, res) => {
     if (!response.ok) {
       const errText = await response.text();
       console.error("Anthropic API error:", response.status, errText);
-      return { ok: false };
+      // Surface enough to diagnose from a single curl without digging through
+      // Vercel logs — status plus Anthropic's own error *type* (e.g.
+      // authentication_error, invalid_request_error, rate_limit_error). The
+      // full message stays server-side only, since it can carry account detail.
+      let upstreamType = null;
+      try {
+        upstreamType = JSON.parse(errText)?.error?.type || null;
+      } catch (e) {
+        // non-JSON upstream body — status alone still tells us what happened
+      }
+      return { ok: false, status: response.status, upstreamType };
     }
 
     // Only commit response headers once we know the upstream call actually
@@ -365,7 +375,11 @@ module.exports = async (req, res) => {
 
     if (!outcome.ok) {
       // Genuine upstream failure on the first attempt — headers not sent yet.
-      res.status(502).json({ error: "Upstream model error" });
+      res.status(502).json({
+        error: "Upstream model error",
+        upstreamStatus: outcome.status || null,
+        upstreamType: outcome.upstreamType || null,
+      });
       return;
     }
 
