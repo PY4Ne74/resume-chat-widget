@@ -66,6 +66,15 @@ function conversationLimitReply() {
   return `Thank you for using my AI. Based on the nature of this conversation, it will be worthwhile to book a call. [Click here](#contact) to continue this conversation with me in a meeting.`;
 }
 
+// Last resort when two attempts in a row produce no visible text. Writing
+// this into the already-open stream keeps the visitor in the conversation —
+// an empty bubble reads as a broken website, which is the worst outcome on a
+// page whose whole job is to convert a hiring manager. #contact is the same
+// real anchor the other scripted replies use.
+function emptyReplyFallback() {
+  return `Sorry — I didn't manage to pull that one together. Ask me again and I'll give it another go, or [fill out the form](#contact) and I'll answer you directly.`;
+}
+
 function buildSystemPrompt(turnNumber, hasJobPostingUrl) {
   const kb = JSON.stringify(knowledgeBase, null, 2);
   const isFirstReply = turnNumber <= 1;
@@ -391,8 +400,38 @@ module.exports = async (req, res) => {
       outcome = await streamAnthropicOnce();
     }
 
-    await logExchange(conversationId, message.trim(), outcome.fullText || "", {
-      type: hasJobPostingUrl ? "job-posting-url" : "normal",
+    // The retry can fail too. Headers are staged but only flushed on the first
+    // write, so when nothing has been forwarded yet res.headersSent is still
+    // false and a genuine upstream failure can still return a clean 502
+    // instead of a 200 with an empty body.
+    if (!outcome.ok && !res.headersSent) {
+      console.error("Retry failed upstream:", outcome.status, outcome.upstreamType);
+      res.status(502).json({
+        error: "Upstream model error",
+        upstreamStatus: outcome.status || null,
+        upstreamType: outcome.upstreamType || null,
+      });
+      return;
+    }
+
+    // Otherwise the retry came back text-free as well. Ending the stream here
+    // would render as a silent blank bubble, so send the scripted fallback and
+    // log it under its own type — these should be visible in the dashboard,
+    // not invisible.
+    const usedFallback = !outcome.forwardedAnyText;
+    let replyText = outcome.fullText || "";
+    if (usedFallback) {
+      console.error("Retry produced no text either — sending scripted fallback");
+      replyText = emptyReplyFallback();
+      res.write(replyText);
+    }
+
+    await logExchange(conversationId, message.trim(), replyText, {
+      type: usedFallback
+        ? "empty-reply-fallback"
+        : hasJobPostingUrl
+        ? "job-posting-url"
+        : "normal",
     });
     res.end();
   } catch (err) {
